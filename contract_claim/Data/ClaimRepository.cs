@@ -40,6 +40,12 @@ namespace contract_claim.Data
                 SaveAll(claims);
             }
         }
+        public static void ClearClaimsForLecturer(string lecturerName)
+        {
+            var claims = GetAll();
+            claims.RemoveAll(c => c.LecturerName.Equals(lecturerName, StringComparison.OrdinalIgnoreCase));
+            SaveAll(claims);
+        }
 
         public static void Add(Claim claim)
         {
