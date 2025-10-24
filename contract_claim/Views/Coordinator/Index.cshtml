@@ -3,9 +3,19 @@
     var username = Context.Session.GetString("Username") ?? "Coordinator";
 }
 
-<div class="container mt-5 text-center">
-    <h2 class="mb-3">Welcome, @username </h2>
-    <p class="text-muted">As a coordinator, you can view and manage submitted claims from lecturers, approving or rejecting them as necessary.</p>
+<div class="container mt-5">
+    <h2 class="mb-3 text-center">Welcome, @username 👋</h2>
+    <p class="text-muted text-center">As a coordinator, you are responsible for reviewing lecturer claims and deciding whether to approve or reject them.</p>
 
-    <a href="/Coordinator/ClaimsList" class="btn btn-primary btn-lg shadow-sm">View Claims List</a>
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h4 class="card-title">📂 Manage Claims</h4>
+                    <p class="card-text">View all submitted lecturer claims and take appropriate action.</p>
+                    <a href="/Coordinator/ClaimsList" class="btn btn-primary">Go to Claims List</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
