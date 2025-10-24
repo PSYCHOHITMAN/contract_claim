@@ -15,15 +15,27 @@
         </li>
     </ul>
 
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+            @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     @if (ViewBag.Error != null)
     {
-        <div class="alert alert-danger">@ViewBag.Error</div>
+        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
+            @ViewBag.Error
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
     }
 
     <form method="post" asp-action="Login">
         <div class="mb-3 text-start">
             <label class="form-label">Email</label>
-            <input type="email" name="username" class="form-control" placeholder="your.email@example.com" required />
+            <input type="email" name="email" class="form-control" placeholder="your.email@example.com" required />
+
         </div>
         <div class="mb-3 text-start">
             <label class="form-label">Password</label>
