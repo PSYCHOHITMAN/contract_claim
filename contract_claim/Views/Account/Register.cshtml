@@ -18,13 +18,16 @@
     @if (ViewBag.Success != null)
     {
         <div class="alert alert-success text-center" id="successAlert">
-            @ViewBag.Success
+            <div class="d-flex align-items-center justify-content-center gap-2">
+                <div class="spinner-border spinner-border-sm text-light" role="status"></div>
+                <span>@ViewBag.Success</span>
+            </div>
         </div>
 
         <script>
             setTimeout(function () {
                 window.location.href = '/Account/Login';
-            }, 2000); // 2000ms = 2 seconds
+            }, 2000); // 2 seconds
         </script>
     }
 
