@@ -1,5 +1,14 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Lecturer Dashboard";
+    var username = Context.Session.GetString("Username") ?? "Lecturer";
 }
+
+<div class="container mt-5 text-center">
+    <h2 class="mb-3">Welcome, @username </h2>
+    <p class="text-muted">As a lecturer, you can submit your monthly claims and track their approval status.</p>
+
+    <div class="d-flex justify-content-center gap-3 mt-4">
+        <a href="/Lecturer/SubmitClaim" class="btn btn-primary btn-lg shadow-sm">Submit Claim</a>
+        <a href="/Lecturer/TrackClaims" class="btn btn-secondary btn-lg shadow-sm">Track Claims</a>
+    </div>
+</div>
