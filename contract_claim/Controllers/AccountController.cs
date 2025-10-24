@@ -26,12 +26,12 @@ namespace contract_claim.Controllers
             Role = role
         };
 
-        UserRepository.Add(user);
-        TempData["Message"] = "Registration successful! Please login.";
-        return RedirectToAction("Login");
-    }
+            UserRepository.Add(user);
+            ViewBag.Success = "Registration successful! You can now login.";
+            return View();
+        }
 
-    [HttpGet]
+        [HttpGet]
     public IActionResult Login() => View();
 
         [HttpPost]
