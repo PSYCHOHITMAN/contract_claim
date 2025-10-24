@@ -27,7 +27,7 @@ namespace contract_claim.Controllers
         };
 
             UserRepository.Add(user);
-            ViewBag.Success = "Registration successful! You can now login.";
+            ViewBag.Success = "Registration successful! Redirecting to login...";
             return View();
         }
 
