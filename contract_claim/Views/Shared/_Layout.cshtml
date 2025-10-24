@@ -18,7 +18,7 @@
             color: #fff !important;
         }
 
-        /* Box styling for nav buttons */
+        
         .navbar .nav-link {
             background-color: #495057;
             border-radius: 6px;
@@ -32,22 +32,22 @@
                 background-color: #0d6efd;
             }
 
-            /* Active page highlight */
+            
             .navbar .nav-link.active {
                 background-color: #0d6efd;
                 font-weight: 700;
             }
 
-            /* Logout distinct in red */
+            
             .navbar .nav-link.logout {
                 background-color: #dc3545;
             }
 
-                .navbar .nav-link.logout:hover {
-                    background-color: #bb2d3b;
+            .navbar .nav-link.logout:hover {
+                background-color: #bb2d3b;
                 }
 
-        /* Optional: compact “Hello” badge look */
+        
         .navbar .nav-text {
             color: #fff;
             opacity: .85;
@@ -55,6 +55,25 @@
             margin-left: 6px;
             border: 1px solid rgba(255,255,255,.15);
             border-radius: 6px;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .form-card {
+            max-width: 400px;
+            margin: 50px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 30px;
+            text-align: center;
         }
     </style>
 </head>
@@ -94,7 +113,6 @@
                             <span class="nav-text">Hello, @username</span>
                         </li>
 
-                        <!-- Back (role-aware) -->
                         <li class="nav-item">
                             <a class="nav-link @(isActive(role, "Index"))" href="@backUrl">⬅ Back</a>
                         </li>
