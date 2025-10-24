@@ -47,6 +47,19 @@ namespace contract_claim.Data
             SaveAll(claims);
         }
 
+        public static void DeleteClaim(int id, string lecturerName)
+        {
+            var claims = GetAll();
+            var claim = claims.FirstOrDefault(c => c.Id == id &&
+                         c.LecturerName.Equals(lecturerName, StringComparison.OrdinalIgnoreCase));
+
+            if (claim != null)
+            {
+                claims.Remove(claim);
+                SaveAll(claims);
+            }
+        }
+
         public static void Add(Claim claim)
         {
             var claims = GetAll();

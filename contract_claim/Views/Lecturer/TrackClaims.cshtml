@@ -19,7 +19,8 @@
 }
 else
 {
-    <div class="d-flex justify-content-end mb-3">
+    <div class="d-flex justify-content-between mb-3">
+        <p class="text-muted">Below are the claims you’ve submitted.</p>
         <form method="post" asp-action="ClearClaims" onsubmit="return confirm('Are you sure you want to clear all your claims?');">
             <button type="submit" class="btn btn-danger btn-sm">🗑 Clear All Claims</button>
         </form>
@@ -34,6 +35,7 @@ else
                 <th>Notes</th>
                 <th>Document</th>
                 <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -67,6 +69,12 @@ else
                         {
                             <span class="badge bg-danger">Rejected</span>
                         }
+                    </td>
+                    <td>
+                        <form method="post" asp-action="DeleteClaim" onsubmit="return confirm('Are you sure you want to delete this claim?');">
+                            <input type="hidden" name="id" value="@claim.Id" />
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
+                        </form>
                     </td>
                 </tr>
             }

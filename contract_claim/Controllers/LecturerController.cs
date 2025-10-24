@@ -65,6 +65,23 @@ namespace contract_claim.Controllers
             return RedirectToAction("TrackClaims");
         }
 
+        [HttpPost]
+        public IActionResult DeleteClaim(int id)
+        {
+            var redirect = RedirectIfNotRole("Lecturer");
+            if (redirect != null) return redirect;
+
+            var username = HttpContext.Session.GetString("Username");
+            if (!string.IsNullOrEmpty(username))
+            {
+                ClaimRepository.DeleteClaim(id, username);
+                TempData["Message"] = "Claim deleted successfully.";
+            }
+
+            return RedirectToAction("TrackClaims");
+        }
+
+
         [HttpGet]
         public IActionResult TrackClaims()
         {
