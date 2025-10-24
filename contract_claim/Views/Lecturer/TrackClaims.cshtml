@@ -5,12 +5,26 @@
 
 <h2 class="mb-4">My Claims</h2>
 
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Message"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 @if (!Model.Any())
 {
     <p>No claims submitted yet.</p>
 }
 else
 {
+    <div class="d-flex justify-content-end mb-3">
+        <form method="post" asp-action="ClearClaims" onsubmit="return confirm('Are you sure you want to clear all your claims?');">
+            <button type="submit" class="btn btn-danger btn-sm">🗑 Clear All Claims</button>
+        </form>
+    </div>
+
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
