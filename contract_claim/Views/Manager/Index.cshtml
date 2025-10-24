@@ -3,9 +3,19 @@
     var username = Context.Session.GetString("Username") ?? "Manager";
 }
 
-<div class="container mt-5 text-center">
-    <h2 class="mb-3">Welcome, @username /h2>
-    <p class="text-muted">As a manager, you have oversight of all lecturer claims, with the ability to review, approve, or reject them.</p>
+<div class="container mt-5">
+    <h2 class="mb-3 text-center">Welcome, @username 👋</h2>
+    <p class="text-muted text-center">As a manager, you have full oversight of all lecturer claims across the system.</p>
 
-    <a href="/Manager/ClaimsList" class="btn btn-primary btn-lg shadow-sm">View All Claims</a>
+    <div class="row justify-content-center mt-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h4 class="card-title">📑 Review All Claims</h4>
+                    <p class="card-text">View, approve, or reject lecturer claims across the institution.</p>
+                    <a href="/Manager/ClaimsList" class="btn btn-primary">Go to All Claims</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
