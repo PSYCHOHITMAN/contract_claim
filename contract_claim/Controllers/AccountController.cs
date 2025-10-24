@@ -49,9 +49,9 @@ namespace contract_claim.Controllers
 
         return user.Role switch
         {
-            "Lecturer" => RedirectToAction("SubmitClaim", "Lecturer"),
-            "Coordinator" => RedirectToAction("ClaimsList", "Coordinator"),
-            "Manager" => RedirectToAction("ClaimsList", "Manager"),
+            "Lecturer" => RedirectToAction("Index", "Lecturer"),
+            "Coordinator" => RedirectToAction("Index", "Coordinator"),
+            "Manager" => RedirectToAction("Index", "Manager"),
             _ => RedirectToAction("Login")
         };
     }

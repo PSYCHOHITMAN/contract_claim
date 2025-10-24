@@ -3,12 +3,28 @@
     var username = Context.Session.GetString("Username") ?? "Lecturer";
 }
 
-<div class="container mt-5 text-center">
-    <h2 class="mb-3">Welcome, @username </h2>
-    <p class="text-muted">As a lecturer, you can submit your monthly claims and track their approval status.</p>
+<div class="container mt-5">
+    <h2 class="mb-3 text-center">Welcome, @username 👋</h2>
+    <p class="text-muted text-center">As a lecturer, you can manage your monthly claims below.</p>
 
-    <div class="d-flex justify-content-center gap-3 mt-4">
-        <a href="/Lecturer/SubmitClaim" class="btn btn-primary btn-lg shadow-sm">Submit Claim</a>
-        <a href="/Lecturer/TrackClaims" class="btn btn-secondary btn-lg shadow-sm">Track Claims</a>
+    <div class="row mt-4">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h4 class="card-title">📄 Submit Claim</h4>
+                    <p class="card-text">Enter your hours worked, hourly rate, and upload supporting documents for approval.</p>
+                    <a href="/Lecturer/SubmitClaim" class="btn btn-primary">Go to Submit Claim</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-body text-center">
+                    <h4 class="card-title">📊 Track Claims</h4>
+                    <p class="card-text">Monitor the status of your submitted claims — pending, approved, or rejected.</p>
+                    <a href="/Lecturer/TrackClaims" class="btn btn-secondary">Go to Track Claims</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
