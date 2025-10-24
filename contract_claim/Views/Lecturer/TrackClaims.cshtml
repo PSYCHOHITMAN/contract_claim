@@ -20,8 +20,9 @@
 else
 {
     <div class="d-flex justify-content-between mb-3">
-        <p class="text-muted">Below are the claims you’ve submitted.</p>
-        <form method="post" asp-action="ClearClaims" onsubmit="return confirm('Are you sure you want to clear all your claims?');">
+        <a href="/Lecturer/Index" class="btn btn-outline-secondary">⬅ Back</a>
+        <form method="post" asp-action="ClearClaims"
+              onsubmit="return confirm('Are you sure you want to clear all your claims?');">
             <button type="submit" class="btn btn-danger btn-sm">🗑 Clear All Claims</button>
         </form>
     </div>
