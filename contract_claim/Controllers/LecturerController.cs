@@ -26,6 +26,12 @@ namespace contract_claim.Controllers
             var redirect = RedirectIfNotRole("Lecturer");
             if (redirect != null) return redirect;
 
+            var username = HttpContext.Session.GetString("Username");
+            if (!string.IsNullOrEmpty(username))
+            {
+                claim.LecturerName = username;
+            }
+
             if (file != null && file.Length > 0)
             {
                 var uploadsDir = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");

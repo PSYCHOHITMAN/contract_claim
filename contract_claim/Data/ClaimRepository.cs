@@ -40,18 +40,24 @@ namespace contract_claim.Data
                 SaveAll(claims);
             }
         }
+
         public static void ClearClaimsForLecturer(string lecturerName)
         {
             var claims = GetAll();
-            claims.RemoveAll(c => c.LecturerName.Equals(lecturerName, StringComparison.OrdinalIgnoreCase));
+
+            
+            claims.RemoveAll(c => string.Equals(c.LecturerName, lecturerName, StringComparison.OrdinalIgnoreCase));
+
             SaveAll(claims);
         }
 
         public static void DeleteClaim(int id, string lecturerName)
         {
             var claims = GetAll();
+
+            
             var claim = claims.FirstOrDefault(c => c.Id == id &&
-                         c.LecturerName.Equals(lecturerName, StringComparison.OrdinalIgnoreCase));
+                          string.Equals(c.LecturerName, lecturerName, StringComparison.OrdinalIgnoreCase));
 
             if (claim != null)
             {
