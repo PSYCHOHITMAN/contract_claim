@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "contract_claim", "contract_claim\contract_claim.csproj", "{3FDF8A8F-C4C5-436C-BD42-6BBE3CAAC5DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContractClaim.Tests", "ContractClaim.Tests\ContractClaim.Tests.csproj", "{144F2BB3-9AFB-4C8D-A6A4-A292BFB1D782}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{3FDF8A8F-C4C5-436C-BD42-6BBE3CAAC5DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FDF8A8F-C4C5-436C-BD42-6BBE3CAAC5DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3FDF8A8F-C4C5-436C-BD42-6BBE3CAAC5DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{144F2BB3-9AFB-4C8D-A6A4-A292BFB1D782}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{144F2BB3-9AFB-4C8D-A6A4-A292BFB1D782}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{144F2BB3-9AFB-4C8D-A6A4-A292BFB1D782}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{144F2BB3-9AFB-4C8D-A6A4-A292BFB1D782}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
