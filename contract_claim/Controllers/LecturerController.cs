@@ -49,6 +49,22 @@ namespace contract_claim.Controllers
             return RedirectToAction("TrackClaims");
         }
 
+        [HttpPost]
+        public IActionResult ClearClaims()
+        {
+            var redirect = RedirectIfNotRole("Lecturer");
+            if (redirect != null) return redirect;
+
+            var username = HttpContext.Session.GetString("Username");
+            if (!string.IsNullOrEmpty(username))
+            {
+                ClaimRepository.ClearClaimsForLecturer(username);
+                TempData["Message"] = "All your claims have been cleared.";
+            }
+
+            return RedirectToAction("TrackClaims");
+        }
+
         [HttpGet]
         public IActionResult TrackClaims()
         {
