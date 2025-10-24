@@ -1,0 +1,12 @@
+﻿@{
+    var role = Context.Session.GetString("Role");
+    string backUrl = role switch
+    {
+        "Lecturer" => Url.Action("Index", "Lecturer"),
+        "Coordinator" => Url.Action("Index", "Coordinator"),
+        "Manager" => Url.Action("Index", "Manager"),
+        _ => Url.Action("Login", "Account")
+    };
+}
+
+<a href="@backUrl" class="btn btn-outline-secondary">⬅ Back</a>
