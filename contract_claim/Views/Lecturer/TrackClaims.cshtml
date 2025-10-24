@@ -1,0 +1,61 @@
+﻿@model List<contract_claim.Models.Claim>
+@{
+    ViewData["Title"] = "TrackClaims";
+}
+
+<h2 class="mb-4">My Claims</h2>
+
+@if (!Model.Any())
+{
+    <p>No claims submitted yet.</p>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Hours Worked</th>
+                <th>Hourly Rate</th>
+                <th>Total Amount</th>
+                <th>Notes</th>
+                <th>Document</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model)
+            {
+                <tr>
+                    <td>@claim.HoursWorked</td>
+                    <td>@claim.HourlyRate</td>
+                    <td>@claim.TotalAmount</td>
+                    <td>@claim.Notes</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(claim.FileName))
+                        {
+                            <a href="/uploads/@claim.FileName" target="_blank">@claim.FileName</a>
+                        }
+                        else
+                        {
+                            <span>N/A</span>
+                        }
+                    </td>
+                    <td>
+                        @if (claim.Status == "Pending")
+                        {
+                            <span class="badge bg-warning text-dark">Pending Review</span>
+                        }
+                        else if (claim.Status == "Approved")
+                        {
+                            <span class="badge bg-success">Approved</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Rejected</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,52 @@
+[
+  {
+    "Id": 1,
+    "LecturerName": null,
+    "HoursWorked": 20,
+    "HourlyRate": 24,
+    "Notes": "uuuink",
+    "FileName": null,
+    "Status": "Approved",
+    "TotalAmount": 480
+  },
+  {
+    "Id": 2,
+    "LecturerName": null,
+    "HoursWorked": 20,
+    "HourlyRate": 24,
+    "Notes": "uuuink",
+    "FileName": null,
+    "Status": "Approved",
+    "TotalAmount": 480
+  },
+  {
+    "Id": 3,
+    "LecturerName": null,
+    "HoursWorked": 20,
+    "HourlyRate": 24,
+    "Notes": "ugiuog",
+    "FileName": null,
+    "Status": "Rejected",
+    "TotalAmount": 480
+  },
+  {
+    "Id": 4,
+    "LecturerName": null,
+    "HoursWorked": 20,
+    "HourlyRate": 15,
+    "Notes": "gug",
+    "FileName": null,
+    "Status": "Rejected",
+    "TotalAmount": 300
+  },
+  {
+    "Id": 5,
+    "LecturerName": null,
+    "HoursWorked": 20,
+    "HourlyRate": 25,
+    "Notes": "hvhkh",
+    "FileName": null,
+    "Status": "Approved",
+    "TotalAmount": 500
+  }
+]
