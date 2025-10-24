@@ -14,102 +14,118 @@
             background-color: #343a40;
         }
 
-        .navbar-brand, .nav-link {
+        .navbar-brand {
             color: #fff !important;
         }
 
-        .form-container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 30px;
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        /* Box styling for nav buttons */
+        .navbar .nav-link {
+            background-color: #495057;
+            border-radius: 6px;
+            margin-left: 6px;
+            padding: 6px 12px;
+            color: #fff !important;
+            transition: background-color .2s ease-in-out;
         }
 
-        .error {
-            color: red;
-        }
+            .navbar .nav-link:hover {
+                background-color: #0d6efd;
+            }
 
-        .success {
-            color: green;
-        }
-
-        .status-pending {
-            color: orange;
-        }
-
-        .status-approved {
-            color: green;
-        }
-
-        .status-rejected {
-            color: red;
-        }
-
-        .form-card {
-            max-width: 400px;
-            margin: 50px auto;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            padding: 30px;
-            text-align: center;
-        }
-
-            .form-card h2 {
+            /* Active page highlight */
+            .navbar .nav-link.active {
+                background-color: #0d6efd;
                 font-weight: 700;
-                margin-bottom: 5px;
             }
 
-            .form-card small {
-                color: #6c757d;
+            /* Logout distinct in red */
+            .navbar .nav-link.logout {
+                background-color: #dc3545;
             }
 
-        .nav-tabs .nav-link {
-            color: #0d6efd !important;
-            font-weight: 500;
+                .navbar .nav-link.logout:hover {
+                    background-color: #bb2d3b;
+                }
+
+        /* Optional: compact “Hello” badge look */
+        .navbar .nav-text {
+            color: #fff;
+            opacity: .85;
+            padding: 6px 12px;
+            margin-left: 6px;
+            border: 1px solid rgba(255,255,255,.15);
+            border-radius: 6px;
         }
-
-            .nav-tabs .nav-link.active {
-                color: #000 !important;
-                font-weight: 600;
-                background-color: #fff !important;
-                border: none !important;
-                border-bottom: 2px solid #0d6efd !important;
-            }
-
-        .nav-tabs {
-            border-bottom: none !important;
-        }
-
     </style>
 </head>
 <body>
+    @{
+        var isAuthenticated = Context.Session.GetString("Username") != null;
+        var username = Context.Session.GetString("Username") ?? "";
+        var role = Context.Session.GetString("Role") ?? "";
+
+        string backUrl = Url.Action("Login", "Account");
+        if (role == "Lecturer") backUrl = Url.Action("Index", "Lecturer");
+        else if (role == "Coordinator") backUrl = Url.Action("Index", "Coordinator");
+        else if (role == "Manager") backUrl = Url.Action("Index", "Manager");
+
+        var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+        var action = ViewContext.RouteData.Values["action"]?.ToString();
+
+        Func<string, string, string> isActive = (c, a) =>
+        {
+            bool matchController = string.Equals(controller, c, StringComparison.OrdinalIgnoreCase);
+            bool matchAction = string.IsNullOrEmpty(a) || string.Equals(action, a, StringComparison.OrdinalIgnoreCase);
+            return (matchController && matchAction) ? "active" : "";
+        };
+    }
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="/">Contract Claim</a>
-            <div class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
-                    @if (Context.Session.GetString("Username") != null)
-                    {
-                        <li class="nav-item"><span class="nav-link">Hello, @Context.Session.GetString("Username")</span></li>
-                        @switch (Context.Session.GetString("Role"))
-                        {
-                            case "Lecturer":
-                                <li class="nav-item"><a class="nav-link" href="/Lecturer/SubmitClaim">Submit Claim</a></li>
-                                <li class="nav-item"><a class="nav-link" href="/Lecturer/TrackClaims">Track Claims</a></li>
-                                break;
-                            case "Coordinator":
-                                <li class="nav-item"><a class="nav-link" href="/Coordinator/ClaimsList">Claims List</a></li>
-                                break;
-                            case "Manager":
-                                <li class="nav-item"><a class="nav-link" href="/Manager/ClaimsList">Claims List</a></li>
-                                break;
-                        }
-                        <li class="nav-item"><a class="nav-link" href="/Account/Logout">Logout</a></li>
-                    }
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topnav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
+            <div id="topnav" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    @if (isAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <span class="nav-text">Hello, @username</span>
+                        </li>
+
+                        <!-- Back (role-aware) -->
+                        <li class="nav-item">
+                            <a class="nav-link @(isActive(role, "Index"))" href="@backUrl">⬅ Back</a>
+                        </li>
+
+                        @* Role menus *@
+                        @if (role == "Lecturer")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(isActive("Lecturer","SubmitClaim"))" href="/Lecturer/SubmitClaim">Submit Claim</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(isActive("Lecturer","TrackClaims"))" href="/Lecturer/TrackClaims">Track Claims</a>
+                            </li>
+                        }
+                        else if (role == "Coordinator")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(isActive("Coordinator","ClaimsList"))" href="/Coordinator/ClaimsList">Claims List</a>
+                            </li>
+                        }
+                        else if (role == "Manager")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(isActive("Manager","ClaimsList"))" href="/Manager/ClaimsList">Claims List</a>
+                            </li>
+                        }
+
+                        <li class="nav-item">
+                            <a class="nav-link logout" href="/Account/Logout">Logout</a>
+                        </li>
+                    }
                 </ul>
             </div>
         </div>
