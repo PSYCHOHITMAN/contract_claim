@@ -94,8 +94,14 @@ namespace contract_claim.Controllers
             var redirect = RedirectIfNotRole("Lecturer");
             if (redirect != null) return redirect;
 
+            var username = HttpContext.Session.GetString("Username");
             var allClaims = ClaimRepository.GetAll();
-            return View(allClaims);
+
+            var myClaims = allClaims
+                .Where(c => string.Equals(c.LecturerName, username, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            return View(myClaims);
         }
     }
 }
