@@ -6,6 +6,11 @@ namespace contract_claim.Controllers
 {
     public class LecturerController : BaseController
     {
+        public IActionResult Index()
+        {
+            return View();
+        }
+
         [HttpGet]
         public IActionResult SubmitClaim()
         {
