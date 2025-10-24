@@ -5,5 +5,19 @@
     "Email": "lecturer@cmcs.com",
     "Password": "12345",
     "Role": "Lecturer"
+  },
+  {
+    "Id": 2,
+    "Username": "kkk",
+    "Email": "Coordinator@cmcs.com",
+    "Password": "4567",
+    "Role": "Coordinator"
+  },
+  {
+    "Id": 3,
+    "Username": "John Doe",
+    "Email": "Manager@test.com",
+    "Password": "0987",
+    "Role": "Manager"
   }
 ]
