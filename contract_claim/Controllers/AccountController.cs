@@ -44,19 +44,23 @@ namespace contract_claim.Controllers
                 return View();
             }
 
+            // Store login session for ALL users
             HttpContext.Session.SetString("Username", user.Username);
             HttpContext.Session.SetString("Role", user.Role);
 
-        return user.Role switch
-        {
-            "Lecturer" => RedirectToAction("Index", "Lecturer"),
-            "Coordinator" => RedirectToAction("Index", "Coordinator"),
-            "Manager" => RedirectToAction("Index", "Manager"),
-            _ => RedirectToAction("Login")
-        };
-    }
+            // Redirect based on role
+            return user.Role switch
+            {
+                "Lecturer" => RedirectToAction("Index", "Lecturer"),
+                "Coordinator" => RedirectToAction("Index", "Coordinator"),
+                "Manager" => RedirectToAction("Index", "Manager"),
+                "HR" => RedirectToAction("Index", "HR"),
+                _ => RedirectToAction("Login")
+            };
+        }
 
-    public IActionResult Logout()
+
+        public IActionResult Logout()
     {
         HttpContext.Session.Clear();
         return RedirectToAction("Login");

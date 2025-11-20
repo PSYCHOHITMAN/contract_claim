@@ -1,0 +1,17 @@
+﻿<h2>Manage Lecturers</h2>
+
+<table class="table table-hover">
+    <thead><tr><th>Name</th><th>Email</th><th>Actions</th></tr></thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.Username</td>
+                <td>@u.Email</td>
+                <td>
+                    <a href="/HR/Slip?email=@u.Email" class="btn btn-sm btn-outline-primary">Payroll Slip</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

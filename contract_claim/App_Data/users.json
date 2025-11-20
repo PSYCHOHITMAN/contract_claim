@@ -19,5 +19,19 @@
     "Email": "Manager@test.com",
     "Password": "0987",
     "Role": "Manager"
+  },
+  {
+    "Id": 4,
+    "Username": "Manny",
+    "Email": "HumanR@cmcs.com",
+    "Password": "iopu",
+    "Role": "HR"
+  },
+  {
+    "Id": 5,
+    "Username": "Dan",
+    "Email": "lecturerr1@cmcs.com",
+    "Password": "Call me",
+    "Role": "Lecturer"
   }
 ]

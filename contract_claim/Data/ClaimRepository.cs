@@ -5,29 +5,42 @@ namespace contract_claim.Data
 {
     public static class ClaimRepository
     {
-        private static readonly string FilePath = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "claims.json");
+        // ALWAYS save claims.json inside the actual project folder
+        private static readonly string FilePath =
+            Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "App_Data", "claims.json");
 
         static ClaimRepository()
         {
-            // Ensure directory exists
+            // Resolve absolute path
+            FilePath = Path.GetFullPath(FilePath);
+
             var dir = Path.GetDirectoryName(FilePath);
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
 
-            // Create empty file if it doesn't exist
+            // Ensure file exists
             if (!File.Exists(FilePath))
                 File.WriteAllText(FilePath, "[]");
         }
 
         public static List<Claim> GetAll()
         {
-            var json = File.ReadAllText(FilePath);
+            string json = File.ReadAllText(FilePath);
             return JsonSerializer.Deserialize<List<Claim>>(json) ?? new List<Claim>();
         }
 
         public static void SaveAll(List<Claim> claims)
         {
-            var json = JsonSerializer.Serialize(claims, new JsonSerializerOptions { WriteIndented = true });
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            string json = JsonSerializer.Serialize(claims, options);
             File.WriteAllText(FilePath, json);
+        }
+
+        public static void Add(Claim claim)
+        {
+            var claims = GetAll();
+            claim.Id = claims.Any() ? claims.Max(c => c.Id) + 1 : 1;
+            claims.Add(claim);
+            SaveAll(claims);
         }
 
         public static void Update(Claim updatedClaim)
@@ -40,24 +53,22 @@ namespace contract_claim.Data
                 SaveAll(claims);
             }
         }
-
         public static void ClearClaimsForLecturer(string lecturerName)
         {
             var claims = GetAll();
 
-            
-            claims.RemoveAll(c => string.Equals(c.LecturerName, lecturerName, StringComparison.OrdinalIgnoreCase));
+            claims.RemoveAll(c =>
+                c.LecturerName.Equals(lecturerName, StringComparison.OrdinalIgnoreCase));
 
             SaveAll(claims);
         }
-
         public static void DeleteClaim(int id, string lecturerName)
         {
             var claims = GetAll();
 
-            
-            var claim = claims.FirstOrDefault(c => c.Id == id &&
-                          string.Equals(c.LecturerName, lecturerName, StringComparison.OrdinalIgnoreCase));
+            var claim = claims.FirstOrDefault(c =>
+                c.Id == id &&
+                c.LecturerName.Equals(lecturerName, StringComparison.OrdinalIgnoreCase));
 
             if (claim != null)
             {
@@ -66,12 +77,6 @@ namespace contract_claim.Data
             }
         }
 
-        public static void Add(Claim claim)
-        {
-            var claims = GetAll();
-            claim.Id = claims.Any() ? claims.Max(c => c.Id) + 1 : 1;
-            claims.Add(claim);
-            SaveAll(claims);
-        }
     }
 }
+

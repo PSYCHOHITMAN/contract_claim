@@ -21,10 +21,13 @@ namespace contract_claim.Controllers
             return null;
         }
 
-        protected IActionResult RedirectIfNotRole(string role)
+        protected IActionResult? RedirectIfNotRole(params string[] roles)
         {
-            if (!IsLoggedIn() || GetUserRole() != role)
+            var sessionRole = HttpContext.Session.GetString("Role");
+
+            if (sessionRole == null || !roles.Contains(sessionRole))
                 return RedirectToAction("Login", "Account");
+
             return null;
         }
     }

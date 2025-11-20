@@ -1,0 +1,50 @@
+﻿<h2>Payroll Summary</h2>
+
+<form method="post">
+    <div class="row">
+        <div class="col-md-4">
+            <label>Year</label>
+            <input type="number" name="year" class="form-control" required min="2020" max="2100" />
+        </div>
+
+        <div class="col-md-4">
+            <label>Month (1-12)</label>
+            <input type="number" name="month" class="form-control" required min="1" max="12" />
+        </div>
+
+        <div class="col-md-4 d-flex align-items-end">
+            <button class="btn btn-primary w-100">Load Payroll</button>
+        </div>
+    </div>
+</form>
+
+@if (Model != null)
+{
+    <hr />
+    <h4>Approved Payroll for @ViewBag.Month/@ViewBag.Year</h4>
+    <h5>Total: R @ViewBag.Total</h5>
+
+    <table class="table table-bordered mt-3">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Hours</th>
+                <th>Rate</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.LecturerName</td>
+                    <td>@c.HoursWorked</td>
+                    <td>@c.HourlyRate</td>
+                    <td>R @c.TotalAmount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a href="/HR/ExportPayrollPdf?year=@ViewBag.Year&month=@ViewBag.Month" class="btn btn-danger">Download PDF</a>
+}

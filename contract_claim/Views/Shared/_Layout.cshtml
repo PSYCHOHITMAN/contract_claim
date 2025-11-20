@@ -87,6 +87,8 @@
         if (role == "Lecturer") backUrl = Url.Action("Index", "Lecturer");
         else if (role == "Coordinator") backUrl = Url.Action("Index", "Coordinator");
         else if (role == "Manager") backUrl = Url.Action("Index", "Manager");
+        else if (role == "HR") backUrl = Url.Action("Index", "HR");
+
 
         var controller = ViewContext.RouteData.Values["controller"]?.ToString();
         var action = ViewContext.RouteData.Values["action"]?.ToString();
@@ -139,6 +141,13 @@
                                 <a class="nav-link @(isActive("Manager","ClaimsList"))" href="/Manager/ClaimsList">Claims List</a>
                             </li>
                         }
+                        else if (role == "HR")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(isActive("HR","Dashboard"))" href="/HR/Dashboard">HR Dashboard</a>
+                            </li>
+                        }
+
 
                         <li class="nav-item">
                             <a class="nav-link logout" href="/Account/Logout">Logout</a>

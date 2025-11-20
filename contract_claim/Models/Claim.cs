@@ -9,6 +9,10 @@
         public string Notes { get; set; }
         public string FileName { get; set; } // uploaded document
         public string Status { get; set; } = "Pending"; // Pending / Approved / Rejected
+        public DateTime? ApprovedDate { get; set; }
+        public string? ApprovedBy { get; set; }
+
+
 
         public double TotalAmount => HoursWorked * HourlyRate;
     }

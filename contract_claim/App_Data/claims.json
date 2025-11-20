@@ -1,52 +1,26 @@
 [
   {
     "Id": 1,
-    "LecturerName": null,
-    "HoursWorked": 20,
-    "HourlyRate": 24,
-    "Notes": "uuuink",
+    "LecturerName": "Oblivi0n",
+    "HoursWorked": 48,
+    "HourlyRate": 12,
+    "Notes": "i give up[",
     "FileName": null,
     "Status": "Approved",
-    "TotalAmount": 480
+    "ApprovedDate": null,
+    "ApprovedBy": null,
+    "TotalAmount": 576
   },
   {
     "Id": 2,
-    "LecturerName": null,
-    "HoursWorked": 20,
-    "HourlyRate": 24,
-    "Notes": "uuuink",
+    "LecturerName": "Dan",
+    "HoursWorked": 45,
+    "HourlyRate": 12,
+    "Notes": "i need a break",
     "FileName": null,
     "Status": "Approved",
-    "TotalAmount": 480
-  },
-  {
-    "Id": 3,
-    "LecturerName": null,
-    "HoursWorked": 20,
-    "HourlyRate": 24,
-    "Notes": "ugiuog",
-    "FileName": null,
-    "Status": "Rejected",
-    "TotalAmount": 480
-  },
-  {
-    "Id": 4,
-    "LecturerName": null,
-    "HoursWorked": 20,
-    "HourlyRate": 15,
-    "Notes": "gug",
-    "FileName": null,
-    "Status": "Rejected",
-    "TotalAmount": 300
-  },
-  {
-    "Id": 5,
-    "LecturerName": null,
-    "HoursWorked": 20,
-    "HourlyRate": 25,
-    "Notes": "hvhkh",
-    "FileName": null,
-    "Status": "Approved",
-    "TotalAmount": 500
+    "ApprovedDate": "2025-11-18T15:50:39.6470368+02:00",
+    "ApprovedBy": "kkk",
+    "TotalAmount": 540
   }
 ]

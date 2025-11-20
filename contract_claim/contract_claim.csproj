@@ -10,4 +10,8 @@
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="QuestPDF" Version="2025.7.4" />
+  </ItemGroup>
+
 </Project>
