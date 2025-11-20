@@ -9,18 +9,38 @@
 <style>
     .glass-card {
         background: rgba(255, 255, 255, 0.25);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-radius: 20px;
-        padding: 25px;
-        border: 1px solid rgba(255, 255, 255, 0.3);
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-radius: 22px;
+        padding: 28px;
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        transition: all 0.35s ease;
+        position: relative;
+        overflow: hidden;
     }
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            top: -40%;
+            left: -40%;
+            width: 120%;
+            height: 120%;
+            background: radial-gradient( circle at top left, rgba(255,255,255,0.35), transparent 70% );
+            opacity: 0.2;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
 
         .glass-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateY(-6px) scale(1.015);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.12), 0 8px 12px rgba(0,0,0,0.08), 0 0 18px rgba(0,150,255,0.20);
+            backdrop-filter: blur(15px);
         }
+
+            .glass-card:hover::before {
+                opacity: 0.35;
+            }
 
     .hero-gradient {
         background: linear-gradient(135deg, #007bff, #00c6ff);

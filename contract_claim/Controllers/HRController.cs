@@ -28,6 +28,36 @@ namespace contract_claim.Controllers
         }
 
         // ---------------------------
+        // HR MAIN DASHBOARD (Index)
+        // ---------------------------
+        public IActionResult Index()
+        {
+            var redirect = CheckRole();
+            if (redirect != null) return redirect;
+
+            // Logged-in HR name
+            ViewBag.DisplayName = HttpContext.Session.GetString("username") ?? "HR";
+
+            var claims = ClaimRepository.GetAll();
+
+            var approved = claims.Where(c => c.Status == "Approved").ToList();
+            var pending = claims.Where(c => c.Status == "Pending").ToList();
+            var rejected = claims.Where(c => c.Status == "Rejected").ToList();
+
+            ViewBag.TotalLecturers = UserRepository.GetAll().Count(u => u.Role == "Lecturer");
+            ViewBag.TotalApproved = approved.Count;
+            ViewBag.TotalPayout = approved.Sum(c => c.TotalAmount);
+
+            // For table
+            ViewBag.TotalApprovedAmount = approved.Sum(c => c.TotalAmount);
+            ViewBag.TotalApprovedCount = approved.Count;
+            ViewBag.PendingCount = pending.Count;
+            ViewBag.RejectedCount = rejected.Count;
+
+            return View(claims);
+        }
+
+        // ---------------------------
         // Lecturers List
         // ---------------------------
         public IActionResult Lecturers()
@@ -43,7 +73,7 @@ namespace contract_claim.Controllers
         }
 
         // ---------------------------
-        // Individual Payroll Slip
+        // Individual Payroll Slip PDF
         // ---------------------------
         public IActionResult Slip(string email)
         {
@@ -68,7 +98,6 @@ namespace contract_claim.Controllers
 
                     page.Content().Column(col =>
                     {
-                        col.Item().Text(" ");
                         foreach (var claim in claims)
                         {
                             col.Item().Text(
@@ -84,49 +113,7 @@ namespace contract_claim.Controllers
         }
 
         // ---------------------------
-        // HR Dashboard Overview
-        // ---------------------------
-        public IActionResult Index()
-        {
-            var redirect = CheckRole();
-            if (redirect != null) return redirect;
-
-            var allClaims = ClaimRepository.GetAll();
-
-            var approved = allClaims.Where(c => c.Status == "Approved").ToList();
-            var pending = allClaims.Where(c => c.Status == "Pending").ToList();
-            var rejected = allClaims.Where(c => c.Status == "Rejected").ToList();
-
-            ViewBag.TotalApprovedAmount = approved.Sum(c => c.TotalAmount);
-            ViewBag.TotalApprovedCount = approved.Count;
-            ViewBag.PendingCount = pending.Count;
-            ViewBag.RejectedCount = rejected.Count;
-
-            return View(allClaims);
-        }
-
-        // ---------------------------
-        // Dashboard Summary
-        // ---------------------------
-        public IActionResult Dashboard()
-        {
-            var redirect = CheckRole();
-            if (redirect != null) return redirect;
-
-            var claims = ClaimRepository.GetAll();
-            var approved = claims.Where(c => c.Status == "Approved").ToList();
-
-            ViewBag.TotalLecturers = UserRepository.GetAll()
-                .Count(u => u.Role == "Lecturer");
-
-            ViewBag.TotalApproved = approved.Count;
-            ViewBag.TotalPayout = approved.Sum(c => c.TotalAmount);
-
-            return View();
-        }
-
-        // ---------------------------
-        // Payroll Page
+        // Payroll
         // ---------------------------
         [HttpGet]
         public IActionResult Payroll()
@@ -157,22 +144,19 @@ namespace contract_claim.Controllers
         // ---------------------------
         public IActionResult Analytics(int? year, int? month)
         {
-            var redirect = RedirectIfNotRole("HR");
+            var redirect = CheckRole();
             if (redirect != null) return redirect;
 
             var claims = ClaimRepository.GetAll();
 
-            // Determine the filters being used
             int selectedYear = year ?? DateTime.Now.Year;
-            int selectedMonth = month ?? 0; // 0 = all months
+            int selectedMonth = month ?? 0;
 
-            // Apply YEAR filter
             claims = claims.Where(c =>
                 c.ApprovedDate.HasValue &&
                 c.ApprovedDate.Value.Year == selectedYear
             ).ToList();
 
-            // Apply MONTH filter only if user selected one
             if (selectedMonth > 0)
             {
                 claims = claims.Where(c =>
@@ -181,7 +165,6 @@ namespace contract_claim.Controllers
                 ).ToList();
             }
 
-            // Stats
             ViewBag.Approved = claims.Count(c => c.Status == "Approved");
             ViewBag.Pending = claims.Count(c => c.Status == "Pending");
             ViewBag.Rejected = claims.Count(c => c.Status == "Rejected");
@@ -190,7 +173,6 @@ namespace contract_claim.Controllers
                 .Where(c => c.Status == "Approved")
                 .Sum(c => c.TotalAmount);
 
-            // Pass filters back so UI stays on selected filters
             ViewBag.Year = selectedYear;
             ViewBag.Month = selectedMonth;
 
@@ -198,7 +180,7 @@ namespace contract_claim.Controllers
         }
 
         // ---------------------------
-        // Export Payroll PDF
+        // EXPORT PDF
         // ---------------------------
         public IActionResult ExportPayrollPdf(int year, int month)
         {
@@ -236,7 +218,7 @@ namespace contract_claim.Controllers
         }
 
         // ---------------------------
-        // Export CSV (Approved Claims)
+        // EXPORT CSV
         // ---------------------------
         public IActionResult ExportApproved()
         {
