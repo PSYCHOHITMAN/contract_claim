@@ -1,8 +1,11 @@
 Contract Monthly Claim System (CMCS)
 
-A modern, full-featured ASP.NET Core MVC (.NET 8) web application built to streamline the monthly claim submission and approval workflow for Independent Contractor (IC) Lecturers. CMCS provides a complete, automated process from claim submission → approval → payroll, with dashboards and tools for Coordinators, Managers, and HR.
+A modern, full-featured ASP.NET Core MVC (.NET 8) web application built to streamline the monthly claim submission and approval workflow for Independent Contractor (IC) Lecturers.
+CMCS delivers a complete automated process:
 
-The system uses Session-based Authentication, Role-based Access, JSON File Repositories, QuestPDF Payroll Generation, and a modern Glass UI interface.
+Claim Submission → Review → Approval → Payroll Summary → PDF/CSV Export
+
+The system includes Session-based Authentication, Role-based Access Control, JSON File Repositories, Automation Rules, QuestPDF payroll generation, and a modern Glass-UI interface.
 
 📌 Table of Contents
 
@@ -26,20 +29,31 @@ Future Enhancements
 
 🧾 Overview
 
-CMCS enables Independent Contractor Lecturers to easily submit their monthly claims (hours worked × hourly rate), upload supporting documents, and track the approval progress.
+The Contract Monthly Claim System (CMCS) allows Independent Contractor Lecturers to quickly:
 
-The system then routes claims through a structured workflow:
+Submit their monthly claims (hours × rate)
+
+Upload supporting documents
+
+Track approval progress through each stage
+
+The workflow is structured and transparent:
 
 Lecturer → Coordinator → Manager → HR → Payroll Output
 
-Every role receives its own personalized dashboard, advanced automation rules, and streamlined tools to ensure accuracy, transparency, and efficiency.
+Each role receives:
+
+✔ A personalized dashboard
+✔ Role-specific tools
+✔ Automation rules
+✔ Accurate tracking and full visibility
 
 🚀 Key Features
 ✔ Authentication & Roles
 
 Secure Email/Password login
 
-Register with one of four roles:
+Register using one of four roles:
 
 Lecturer
 
@@ -49,11 +63,13 @@ Manager
 
 HR
 
-Role-based navigation and access control (Session-based)
+Session-based authentication
+
+Smart role-based navigation
 
 ✔ Lecturer Features
 
-Submit monthly claim
+Submit a monthly claim:
 
 Hours worked
 
@@ -61,7 +77,7 @@ Hourly rate
 
 Notes
 
-Document upload
+Supporting document upload
 
 Auto-calculated total amount
 
@@ -73,25 +89,29 @@ Approved
 
 Rejected
 
-View warnings for missing documents or policy issues
-
-✔ Coordinator Features
-
-View ALL lecturer claims in their department
-
-Approve / Reject directly from the dashboard
-
-See automatic policy warnings:
+Warnings displayed for:
 
 Missing documents
 
-High payout
+Unusual values
 
-Suspicious values
+✔ Coordinator Features
 
-Claim statistics summary:
+Manage all lecturer claims in their department
 
-Total
+Approve / Reject with one click
+
+Automated policy checks:
+
+Missing document flag
+
+High payout warning
+
+Duplicate monthly claim detection
+
+Dashboard summaries:
+
+Total claims
 
 Pending
 
@@ -101,75 +121,84 @@ Rejected
 
 ✔ Manager Features
 
-Institution-wide oversight
+Full institution-wide claim visibility
 
-Review and approve/reject claims after Coordinator
+Second-level approval after Coordinator
 
-View all lecturer submissions
-
-Approval audit trail included:
+Detailed audit trail:
 
 ApprovedBy
 
 ApprovedDate
 
+Access to all lecturer submissions
+
 ✔ HR Features
 
-Access only Approved claims
+Access to all Approved claims
 
-Manage Lecturer Records (Add, Edit, Remove)
+Lecturer Management
 
-Generate payroll:
+Add
 
-CSV Export
+Edit
 
-PDF Payslip Export (QuestPDF)
+Remove
 
-Payroll summary dashboard
+Payroll Generation
 
-View analytics dashboard:
+Export CSV
 
-Approval trends
+Export PDF (QuestPDF)
 
-Lecturer performance
+Analytics Dashboard:
 
-Status breakdown charts
+Approval rate trends
+
+Payment statistics
+
+Performance charts
 
 🤖 Automation Policies
 
-CMCS includes built-in automated validation using ClaimPolicyService:
+CMCS includes automated validation through ClaimPolicyService:
 
-Auto-Reject Conditions
+Auto-Reject Rules
 
-HoursWorked > 300
-
-HourlyRate outside R100–R1000
-
-Duplicate claim submitted in the same month
+❌ HoursWorked > 300
+❌ Hourly Rate outside R100 – R1000
+❌ Duplicate claim within the same month
 
 Auto-Flag Warnings
 
-Missing supporting document
+⚠ Missing supporting document
+⚠ TotalAmount over R15,000 (large payout)
 
-Large payout (TotalAmount > R15,000)
-
-These warnings appear to Coordinators/Managers during review.
+Warnings appear on the Coordinator and Manager review screens.
 
 🧱 Tech Stack
 
-.NET 8 (ASP.NET Core MVC)
+.NET 8
+
+ASP.NET Core MVC
 
 C#
 
-Bootstrap 5
+Bootstrap 5 (UI)
 
 QuestPDF (PDF payroll generation)
 
-JSON-based repositories (users.json, claims.json, payroll.json)
+JSON-based persistence:
+
+users.json
+
+claims.json
+
+payroll.json
 
 Session-based authentication
 
-xUnit (unit testing)
+xUnit tests
 
 📂 Project Structure
 ContractClaim/
@@ -223,33 +252,33 @@ ContractClaim/
     ├── Controllers/
 
 💻 Getting Started
-1. Prerequisites
+1️⃣ Prerequisites
 
 Install .NET 8 SDK
 
-Visual Studio / VS Code / Rider
+Use Visual Studio, Rider, or VS Code
 
-2. Clone the Repository
+2️⃣ Clone the Repository
 git clone https://github.com/your-repo/contract_claim.git
 cd contract_claim
 
-3. Restore Dependencies
+3️⃣ Restore Dependencies
 dotnet restore
 
-4. Run the Application
+4️⃣ Run the Application
 dotnet run
 
 
-Then open your browser:
+Then open:
 
 ➡ http://localhost:5000
 
 or
 ➡ https://localhost:7000
 
-🖼 Screenshots (Recommended Placement)
+🖼 Screenshots (Recommended Order)
 
-Include your screenshots in this order:
+Paste these into your README or PowerPoint:
 
 Landing Page
 
@@ -261,7 +290,7 @@ Track Claims Page
 
 Coordinator Dashboard
 
-Coordinator Review Table
+Coordinator Review Table (Policy Warnings Visible)
 
 Manager Dashboard
 
@@ -269,18 +298,18 @@ HR Dashboard
 
 Analytics Dashboard
 
-Payroll PDF/CSV Output
+Payroll Summary + CSV + PDF Output
 
 🔮 Future Enhancements
 
-Email notifications on approval/rejection
+📧 Email notifications for approvals
 
-Full database migration (SQL Server)
+🗄 SQL Database migration (replace JSON)
 
-Azure deployment
+☁ Azure deployment
 
-Audit logging
+🧾 Full audit logging
 
-Multi-department management
+🏫 Multi-department management
 
-Notification bell UI
+🔔 Notification bell UI
