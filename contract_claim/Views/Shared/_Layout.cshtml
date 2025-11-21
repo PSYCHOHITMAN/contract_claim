@@ -9,10 +9,6 @@
         body {
             padding-top: 70px;
         }
-
-        /* -----------------------------
-           GLASSMORPHISM NAVBAR BASE
-        ------------------------------ */
         .navbar-glass {
             background: rgba(255, 255, 255, 0.18);
             backdrop-filter: blur(14px);
@@ -23,7 +19,6 @@
             transition: background .25s ease, border .25s ease, box-shadow .25s ease;
         }
 
-        /* Nav item styling */
         .navbar .nav-link {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(4px);
@@ -46,14 +41,12 @@
                 color: white !important;
             }
 
-            /* Logout button */
             .navbar .nav-link.logout {
                 background: rgba(220, 53, 69, 0.8);
                 border-color: rgba(220, 53, 69, 1);
                 color: white !important;
             }
 
-        /* Username tag */
         .nav-text {
             background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.25);
@@ -114,29 +107,39 @@
                         <li class="nav-item">
                             <span class="nav-text">Hello, @username</span>
                         </li>
-                        <li class="nav-item"> 
-                            <a class="nav-link @(isActive(role, "Index"))" href="@backUrl">Home</a> 
+                        <li class="nav-item">
+                            <a class="nav-link @(isActive(role, "Index"))" href="@backUrl">
+                                <i class="bi bi-house-door-fill"></i> Home
+                            </a>
                         </li>
 
                         @if (role == "Lecturer")
                         {
                             <li class="nav-item">
-                                <a class="nav-link @(isActive("Lecturer","SubmitClaim"))" href="/Lecturer/SubmitClaim">Submit Claim</a>
+                                <a class="nav-link @(isActive("Lecturer","SubmitClaim"))" href="/Lecturer/SubmitClaim">
+                                    <i class="bi bi-file-earmark-plus"></i> Submit Claim
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link @(isActive("Lecturer","TrackClaims"))" href="/Lecturer/TrackClaims">Track Claims</a>
+                                <a class="nav-link @(isActive("Lecturer","TrackClaims"))" href="/Lecturer/TrackClaims">
+                                    <i class="bi bi-clock-history"></i> Track Claims
+                                </a>
                             </li>
                         }
                         else if (role == "Coordinator")
                         {
                             <li class="nav-item">
-                                <a class="nav-link @(isActive("Coordinator","ClaimsList"))" href="/Coordinator/ClaimsList">Claims List</a>
+                                <a class="nav-link @(isActive("Coordinator","ClaimsList"))" href="/Coordinator/ClaimsList">
+                                    <i class="bi bi-check2-square"></i> Claims List
+                                </a>
                             </li>
                         }
                         else if (role == "Manager")
                         {
                             <li class="nav-item">
-                                <a class="nav-link @(isActive("Manager","ClaimsList"))" href="/Manager/ClaimsList">Claims List</a>
+                                <a class="nav-link @(isActive("Manager","ClaimsList"))" href="/Manager/ClaimsList">
+                                    <i class="bi bi-clipboard-data"></i> Claims List
+                                </a>
                             </li>
                         }
                         else if (role == "HR")
@@ -161,7 +164,9 @@
                         }
 
                         <li class="nav-item">
-                            <a class="nav-link logout" href="/Account/Logout">Logout</a>
+                            <a class="nav-link logout" href="/Account/Logout">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </a>
                         </li>
                     }
                 </ul>

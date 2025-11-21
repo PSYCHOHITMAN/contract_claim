@@ -27,15 +27,13 @@ namespace contract_claim.Controllers
                 .ToList();
         }
 
-        // ---------------------------
-        // HR MAIN DASHBOARD (Index)
-        // ---------------------------
+        
         public IActionResult Index()
         {
             var redirect = CheckRole();
             if (redirect != null) return redirect;
 
-            // Logged-in HR name
+            
             ViewBag.DisplayName = HttpContext.Session.GetString("username") ?? "HR";
 
             var claims = ClaimRepository.GetAll();
@@ -48,7 +46,7 @@ namespace contract_claim.Controllers
             ViewBag.TotalApproved = approved.Count;
             ViewBag.TotalPayout = approved.Sum(c => c.TotalAmount);
 
-            // For table
+            
             ViewBag.TotalApprovedAmount = approved.Sum(c => c.TotalAmount);
             ViewBag.TotalApprovedCount = approved.Count;
             ViewBag.PendingCount = pending.Count;
@@ -57,9 +55,6 @@ namespace contract_claim.Controllers
             return View(claims);
         }
 
-        // ---------------------------
-        // Lecturers List
-        // ---------------------------
         public IActionResult Lecturers()
         {
             var redirect = CheckRole();
@@ -112,9 +107,7 @@ namespace contract_claim.Controllers
             return File(pdfBytes, "application/pdf", $"{email}_PayrollSlip.pdf");
         }
 
-        // ---------------------------
-        // Payroll
-        // ---------------------------
+        
         [HttpGet]
         public IActionResult Payroll()
         {
@@ -139,9 +132,91 @@ namespace contract_claim.Controllers
             return View(claims);
         }
 
-        // ---------------------------
-        // Analytics
-        // ---------------------------
+      
+        [HttpGet]
+        public IActionResult AddLecturer()
+        {
+            var redirect = CheckRole();
+            if (redirect != null) return redirect;
+
+            return View();
+        }
+
+        
+        [HttpPost]
+        public IActionResult AddLecturer(string Username, string Email, decimal? Rate)
+        {
+            var redirect = CheckRole();
+            if (redirect != null) return redirect;
+
+            if (UserRepository.Exists(Email))
+            {
+                TempData["Error"] = "A lecturer with this email already exists.";
+                return RedirectToAction("Lecturers");
+            }
+
+            var newUser = new User
+            {
+                Username = Username,
+                Email = Email,
+                Password = "12345",        // Default temp password
+                Role = "Lecturer",
+                HourlyRate = Rate ?? 0
+            };
+
+            UserRepository.Add(newUser);
+
+            TempData["Message"] = "Lecturer added successfully!";
+            return RedirectToAction("Lecturers");
+        }
+
+        [HttpGet]
+        public IActionResult EditLecturer(int id)
+        {
+            var redirect = CheckRole();
+            if (redirect != null) return redirect;
+
+            var lecturer = UserRepository.GetById(id);
+            if (lecturer == null) return NotFound();
+
+            return View(lecturer);
+        }
+
+        
+        [HttpPost]
+        public IActionResult EditLecturer(int id, string Username, string Email, decimal HourlyRate)
+        {
+            var redirect = CheckRole();
+            if (redirect != null) return redirect;
+
+            var lecturer = UserRepository.GetById(id);
+            if (lecturer == null) return NotFound();
+
+            lecturer.Username = Username;
+            lecturer.Email = Email;
+            lecturer.HourlyRate = HourlyRate;
+
+            UserRepository.Update(lecturer);
+
+            TempData["Message"] = "Lecturer information updated!";
+            return RedirectToAction("Lecturers");
+        }
+
+        
+        [HttpPost]
+        public IActionResult DeleteLecturer(int id)
+        {
+            var redirect = CheckRole();
+            if (redirect != null) return redirect;
+
+            UserRepository.Delete(id);
+
+            TempData["Message"] = "Lecturer removed successfully.";
+            return RedirectToAction("Lecturers");
+        }
+
+
+
         public IActionResult Analytics(int? year, int? month)
         {
             var redirect = CheckRole();
@@ -179,9 +254,6 @@ namespace contract_claim.Controllers
             return View(claims);
         }
 
-        // ---------------------------
-        // EXPORT PDF
-        // ---------------------------
         public IActionResult ExportPayrollPdf(int year, int month)
         {
             var redirect = CheckRole();
@@ -217,9 +289,6 @@ namespace contract_claim.Controllers
             return File(pdfBytes, "application/pdf", $"Payroll_{year}_{month}.pdf");
         }
 
-        // ---------------------------
-        // EXPORT CSV
-        // ---------------------------
         public IActionResult ExportApproved()
         {
             var redirect = CheckRole();

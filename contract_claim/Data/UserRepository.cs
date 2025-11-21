@@ -5,7 +5,8 @@ namespace contract_claim.Data
 {
     public static class UserRepository
     {
-        private static readonly string FilePath = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "users.json");
+        private static readonly string FilePath =
+            Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "users.json");
 
         static UserRepository()
         {
@@ -34,16 +35,51 @@ namespace contract_claim.Data
             SaveAll(users);
         }
 
-        public static User? Find(string email, string password)
+        public static User? GetById(int id)
         {
-            var users = GetAll();
-            return users.FirstOrDefault(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase) && u.Password == password);
+            return GetAll().FirstOrDefault(u => u.Id == id);
         }
 
         public static bool Exists(string email)
         {
+            return GetAll().Any(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public static void Update(User updated)
+        {
             var users = GetAll();
-            return users.Any(u => u.Email.Equals(email, StringComparison.OrdinalIgnoreCase));
+            var existing = users.FirstOrDefault(u => u.Id == updated.Id);
+
+            if (existing == null) return;
+
+            existing.Username = updated.Username;
+            existing.Email = updated.Email;
+            existing.Role = updated.Role;
+            existing.Password = updated.Password;  
+            existing.HourlyRate = updated.HourlyRate;
+
+            SaveAll(users);
+        }
+
+        public static User? Find(string email, string password)
+        {
+            var users = GetAll();
+            return users.FirstOrDefault(u =>
+                u.Email.Equals(email, StringComparison.OrdinalIgnoreCase)
+                && u.Password == password
+            );
+        }
+
+
+        public static void Delete(int id)
+        {
+            var users = GetAll();
+            var user = users.FirstOrDefault(u => u.Id == id);
+            if (user != null)
+            {
+                users.Remove(user);
+                SaveAll(users);
+            }
         }
     }
 }

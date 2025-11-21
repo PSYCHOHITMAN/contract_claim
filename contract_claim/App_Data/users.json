@@ -4,34 +4,39 @@
     "Username": "Oblivi0n",
     "Email": "lecturer@cmcs.com",
     "Password": "12345",
-    "Role": "Lecturer"
+    "Role": "Lecturer",
+    "HourlyRate": 0
   },
   {
     "Id": 2,
     "Username": "kkk",
     "Email": "Coordinator@cmcs.com",
     "Password": "4567",
-    "Role": "Coordinator"
+    "Role": "Coordinator",
+    "HourlyRate": 0
   },
   {
     "Id": 3,
     "Username": "John Doe",
     "Email": "Manager@test.com",
     "Password": "0987",
-    "Role": "Manager"
+    "Role": "Manager",
+    "HourlyRate": 0
   },
   {
     "Id": 4,
     "Username": "Manny",
     "Email": "HumanR@cmcs.com",
     "Password": "iopu",
-    "Role": "HR"
+    "Role": "HR",
+    "HourlyRate": 0
   },
   {
     "Id": 5,
     "Username": "Dan",
     "Email": "lecturerr1@cmcs.com",
     "Password": "Call me",
-    "Role": "Lecturer"
+    "Role": "Lecturer",
+    "HourlyRate": 0
   }
 ]
