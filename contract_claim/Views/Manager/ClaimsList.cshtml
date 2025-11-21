@@ -1,4 +1,4 @@
-﻿@model List<contract_claim.Models.Claim> 
+﻿@model List<contract_claim.Models.Claim>
 
 @{
     ViewData["Title"] = "Manager - Claims List";
@@ -19,6 +19,7 @@
         max-width: 1200px;
         margin: 40px auto;
     }
+
     .hero-glass {
         background: linear-gradient(135deg, #4e73df, #1cc8ee);
         border-radius: 22px;
@@ -30,48 +31,48 @@
         overflow: hidden;
     }
 
-    .hero-glass::after {
-        content: "";
-        position: absolute;
-        right: -40px; top: -40px;
-        width: 150px; height: 150px;
-        background: rgba(255,255,255,0.23);
-        border-radius: 50%;
-        filter: blur(6px);
-    }
+        .hero-glass::after {
+            content: "";
+            position: absolute;
+            right: -40px;
+            top: -40px;
+            width: 150px;
+            height: 150px;
+            background: rgba(255,255,255,0.23);
+            border-radius: 50%;
+            filter: blur(6px);
+        }
+
     .glass-box {
-        background: rgba(255, 255, 255, 0.85);
+        background: rgba(255,255,255,0.85);
         backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
         border-radius: 18px;
         padding: 25px;
-        border: 1px solid rgba(255, 255, 255, .45);
         box-shadow: 0 12px 35px rgba(0,0,0,0.12);
         margin-bottom: 40px;
-        transition: 0.25s ease;
-    }
-    .glass-box:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 18px 55px rgba(0,0,0,0.18);
-    }
-    table thead {
-        background: #343a40;
-        color: white;
-        border-radius: 12px;
     }
 
-    table tbody tr:hover {
-        background-color: rgba(0, 123, 255, .05);
-    }
     .status-badge {
         padding: 6px 12px;
         border-radius: 50px;
         font-weight: 600;
         font-size: .85rem;
     }
-    .pending { background: rgba(255,193,7,.2); color: #856404; }
-    .approved { background: rgba(40,167,69,.2); color: #155724; }
-    .rejected { background: rgba(220,53,69,.2); color: #721c24; }
+
+    .pending {
+        background: rgba(255,193,7,.2);
+        color: #856404;
+    }
+
+    .approved {
+        background: rgba(40,167,69,.2);
+        color: #155724;
+    }
+
+    .rejected {
+        background: rgba(220,53,69,.2);
+        color: #721c24;
+    }
 
     .pill-btn {
         border-radius: 50px;
@@ -81,7 +82,6 @@
     }
 </style>
 
-
 <div class="page-wrapper">
 
     <div class="hero-glass d-flex justify-content-between align-items-center">
@@ -89,7 +89,6 @@
             <h2 class="fw-bold">All Lecturer Claims</h2>
             <p class="mb-0">Review, Approve, or Reject claims across the institution.</p>
         </div>
-
     </div>
 
     @if (TempData["Message"] != null)
@@ -124,7 +123,22 @@
                     @foreach (var claim in Model)
                     {
                         <tr>
-                            <td>@claim.LecturerName</td>
+                            <!-- Lecturer + Automated Checks -->
+                            <td>
+                                @claim.LecturerName
+
+                                <!-- AUTOMATED WARNINGS -->
+                                @if (claim.TotalAmount > 15000)
+                                {
+                                    <span class="badge bg-warning text-dark ms-2">High Amount</span>
+                                }
+
+                                @if (string.IsNullOrEmpty(claim.FileName))
+                                {
+                                    <span class="badge bg-danger ms-2">No Document</span>
+                                }
+                            </td>
+
                             <td>@claim.HoursWorked</td>
                             <td>R @claim.HourlyRate</td>
                             <td><strong>R @claim.TotalAmount.ToString("N2")</strong></td>
@@ -133,7 +147,9 @@
                             <td>
                                 @if (!string.IsNullOrEmpty(claim.FileName))
                                 {
-                                    <a href="/uploads/@claim.FileName" target="_blank" class="text-primary fw-semibold">View</a>
+                                    <a href="/uploads/@claim.FileName"
+                                       target="_blank"
+                                       class="text-primary fw-semibold">View</a>
                                 }
                                 else
                                 {
@@ -156,8 +172,8 @@
                                 }
                             </td>
 
+                            <!-- Manager Actions -->
                             <td>
-                              
                                 @if (claim.Status == "Pending")
                                 {
                                     <form method="post" asp-action="Approve" asp-controller="Manager" class="d-inline">
@@ -179,7 +195,6 @@
                                     </div>
                                 }
                             </td>
-
                         </tr>
                     }
                 </tbody>
