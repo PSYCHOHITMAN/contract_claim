@@ -1,30 +1,119 @@
-﻿@{
+﻿@{ 
     ViewData["Title"] = "Lecturer Dashboard";
     var username = Context.Session.GetString("Username") ?? "Lecturer";
 }
 
-<div class="container mt-5">
-    <h2 class="mb-3 text-center">Welcome, @username 👋</h2>
-    <p class="text-muted text-center">As a lecturer, you can manage your monthly claims below.</p>
+<style>
+    /* ----------------------------------
+       HERO SECTION (matching HR style)
+       ----------------------------------*/
+    .hero-box {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        border-radius: 26px;
+        padding: 36px;
+        text-align: center;
+        color: #fff;
+        box-shadow: 0 20px 45px rgba(0,0,0,0.18);
+        margin-bottom: 45px;
+        font-weight: 500;
+        position: relative;
+        overflow: hidden;
+    }
 
+    .hero-box::after {
+        content: "";
+        position: absolute;
+        right: -40px;
+        top: -40px;
+        width: 150px;
+        height: 150px;
+        background: rgba(255,255,255,0.25);
+        border-radius: 50%;
+        filter: blur(4px);
+    }
+
+    /* ----------------------------------
+       GLASS CARDS
+       ----------------------------------*/
+    .glass-card {
+        background: rgba(255,255,255,0.85);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-radius: 22px;
+        padding: 28px;
+        border: 1px solid rgba(255,255,255,0.55);
+        box-shadow: 0 12px 30px rgba(0,0,0,0.10);
+        transition: 0.25s ease;
+        text-align: center;
+    }
+
+    .glass-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+    }
+
+    /* ----------------------------------
+       ICON TITLES
+       ----------------------------------*/
+    .glass-card h4 {
+        font-weight: 700;
+        margin-bottom: 12px;
+    }
+
+    /* ----------------------------------
+       BUTTONS (pill style)
+       ----------------------------------*/
+    .pill-btn {
+        border-radius: 50px;
+        padding: 10px 22px;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    .btn-primary.pill-btn {
+        background: #0d6efd;
+        border: none;
+    }
+
+    .btn-secondary.pill-btn {
+        background: #6c757d;
+        border: none;
+    }
+</style>
+
+
+<div class="container mt-5">
+
+    <!-- HERO -->
+    <div class="hero-box">
+        <h1 class="fw-bold mb-2">Welcome, @username 👋</h1>
+        <p class="mb-0">Manage your monthly claims quickly and easily on the CMCS platform.</p>
+    </div>
+
+    <!-- GLASS CARD GRID -->
     <div class="row mt-4">
+        
+        <!-- Submit Claim -->
         <div class="col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-body text-center">
-                    <h4 class="card-title">📄 Submit Claim</h4>
-                    <p class="card-text">Enter your hours worked, hourly rate, and upload supporting documents for approval.</p>
-                    <a href="/Lecturer/SubmitClaim" class="btn btn-primary">Go to Submit Claim</a>
-                </div>
+            <div class="glass-card">
+                <h4>📄 Submit Claim</h4>
+                <p>Enter your hours, hourly rate, and upload documents for approval.</p>
+                <a href="/Lecturer/SubmitClaim" class="btn btn-primary pill-btn">
+                    Go to Submit Claim
+                </a>
             </div>
         </div>
+
+        <!-- Track Claims -->
         <div class="col-md-6 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-body text-center">
-                    <h4 class="card-title">📊 Track Claims</h4>
-                    <p class="card-text">Monitor the status of your submitted claims — pending, approved, or rejected.</p>
-                    <a href="/Lecturer/TrackClaims" class="btn btn-secondary">Go to Track Claims</a>
-                </div>
+            <div class="glass-card">
+                <h4>📊 Track Claims</h4>
+                <p>Monitor the status — pending, approved, or rejected.</p>
+                <a href="/Lecturer/TrackClaims" class="btn btn-secondary pill-btn">
+                    Go to Track Claims
+                </a>
             </div>
         </div>
+
     </div>
 </div>
