@@ -83,6 +83,28 @@
         font-weight: 600;
         font-size: .85rem;
     }
+
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: .85rem;
+    }
+
+    .pending {
+        background: rgba(255,193,7,.2);
+        color: #856404;
+    }
+
+    .approved {
+        background: rgba(40,167,69,.2);
+        color: #155724;
+    }
+
+    .rejected {
+        background: rgba(220,53,69,.2);
+        color: #721c24;
+    }
     .pending { background: rgba(255,193,7,.2); color: #795900; }
     .approved { background: rgba(40,167,69,.2); color: #155724; }
     .rejected { background: rgba(220,53,69,.2); color: #842029; }
@@ -170,7 +192,9 @@
                             <td>
                                 @if (!string.IsNullOrEmpty(claim.FileName))
                                 {
-                                    <a class="fw-semibold text-primary" target="_blank" href="/uploads/@claim.FileName">View</a>
+                                    <a href="/uploads/@claim.FileName"
+                                       target="_blank"
+                                       class="text-primary fw-semibold">View</a>
                                 }
                                 else
                                 {
@@ -181,14 +205,29 @@
                             <td>
                                 @if (claim.Status == "Pending")
                                 {
+                                    <span class="status-badge pending">Pending</span>
+                                }
+                                else if (claim.Status == "Approved")
+                                {
+                                    <span class="status-badge approved">Approved</span>
+                                }
+                                else
+                                {
+                                    <span class="status-badge rejected">Rejected</span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (claim.Status == "Pending")
+                                {
                                     <form method="post" asp-action="Approve" asp-controller="Coordinator" class="d-inline">
                                         <input type="hidden" name="id" value="@claim.Id" />
-                                        <button class="btn btn-success btn-sm pill-btn">Approve</button>
+                                        <button type="submit" class="btn btn-success btn-sm pill-btn me-1">Approve</button>
                                     </form>
 
-                                    <form method="post" asp-action="Reject" asp-controller="Coordinator" class="d-inline ms-1">
+                                    <form method="post" asp-action="Reject" asp-controller="Coordinator" class="d-inline">
                                         <input type="hidden" name="id" value="@claim.Id" />
-                                        <button class="btn btn-danger btn-sm pill-btn">Reject</button>
+                                        <button type="submit" class="btn btn-danger btn-sm pill-btn">Reject</button>
                                     </form>
                                 }
                                 else
