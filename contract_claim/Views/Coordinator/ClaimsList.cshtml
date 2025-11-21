@@ -210,6 +210,14 @@
                                 {
                                     <span class="text-muted small">Action Completed</span>
                                 }
+                                else
+                                {
+                                <div class="small text-muted">
+                                    @claim.Status <br />
+                                    by @claim.ApprovedBy <br />
+                                    on @claim.ApprovedDate?.ToString("yyyy-MM-dd HH:mm")
+                                </div>
+                                }
                             </td>
 
                         </tr>

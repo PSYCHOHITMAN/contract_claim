@@ -22,5 +22,17 @@
     "ApprovedDate": "2025-11-18T15:50:39.6470368+02:00",
     "ApprovedBy": "kkk",
     "TotalAmount": 540
+  },
+  {
+    "Id": 3,
+    "LecturerName": "Oblivi0n",
+    "HoursWorked": 48,
+    "HourlyRate": 30,
+    "Notes": "long day",
+    "FileName": "Payroll_2025_11.pdf",
+    "Status": "Rejected",
+    "ApprovedDate": "2025-11-21T15:10:35.064882+02:00",
+    "ApprovedBy": "John Doe",
+    "TotalAmount": 1440
   }
 ]
