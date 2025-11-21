@@ -1,83 +1,119 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Contract Claim</title>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+
     <style>
-        body {
-            padding-top: 70px;
+        /* -----------------------------------
+           THEME VARIABLES (LIGHT + DARK)
+        ----------------------------------- */
+        :root {
+            --bg: #ffffff;
+            --text: #212529;
+            --nav-bg: #343a40;
+            --nav-item-bg: #495057;
+            --nav-hover: #0d6efd;
+            --nav-border: rgba(255, 255, 255, .15);
         }
 
+        [data-theme="dark"] {
+            --bg: #1e1e1e;
+            --text: #e9ecef;
+            --nav-bg: #111;
+            --nav-item-bg: #222;
+            --nav-hover: #0d6efd;
+            --nav-border: rgba(255, 255, 255, .25);
+        }
+
+        /* -----------------------------------
+           GLOBAL STYLES
+        ----------------------------------- */
+        body {
+            padding-top: 72px;
+            background: var(--bg);
+            color: var(--text);
+            transition: background .25s ease, color .25s ease;
+        }
+
+        /* -----------------------------------
+           NAVIGATION BAR
+        ----------------------------------- */
         .navbar {
-            background-color: #343a40;
+            background-color: var(--nav-bg) !important;
+            transition: background .25s ease;
         }
 
         .navbar-brand {
             color: #fff !important;
+            font-weight: 600;
         }
 
-        
+        .navbar .nav-text {
+            color: #fff;
+            opacity: .9;
+            padding: 6px 12px;
+            margin-right: 6px;
+            border: 1px solid var(--nav-border);
+            border-radius: 6px;
+        }
+
         .navbar .nav-link {
-            background-color: #495057;
+            background-color: var(--nav-item-bg);
             border-radius: 6px;
             margin-left: 6px;
             padding: 6px 12px;
             color: #fff !important;
-            transition: background-color .2s ease-in-out;
+            transition: .2s;
         }
 
-            .navbar .nav-link:hover {
-                background-color: #0d6efd;
-            }
+        .navbar .nav-link:hover {
+            background-color: var(--nav-hover);
+        }
 
-            
-            .navbar .nav-link.active {
-                background-color: #0d6efd;
-                font-weight: 700;
-            }
+        .navbar .nav-link.active {
+            background-color: var(--nav-hover);
+            font-weight: 700;
+        }
 
-            
-            .navbar .nav-link.logout {
-                background-color: #dc3545;
-            }
+        .navbar .nav-link.logout {
+            background-color: #dc3545;
+        }
 
-            .navbar .nav-link.logout:hover {
-                background-color: #bb2d3b;
-                }
+        .navbar .nav-link.logout:hover {
+            background-color: #b52a33;
+        }
 
-        
-        .navbar .nav-text {
+        /* Toggle button */
+        #themeToggle {
+            background: transparent;
+            border: 1px solid var(--nav-border);
             color: #fff;
-            opacity: .85;
-            padding: 6px 12px;
-            margin-left: 6px;
-            border: 1px solid rgba(255,255,255,.15);
-            border-radius: 6px;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 12px;
+            cursor: pointer;
+            transition: .2s;
         }
 
-        .form-container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 30px;
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        .form-card {
-            max-width: 400px;
-            margin: 50px auto;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            padding: 30px;
-            text-align: center;
+        #themeToggle:hover {
+            background: var(--nav-hover);
         }
     </style>
 </head>
+
 <body>
+    @* ------------------------------
+       SESSION & NAV LOGIC
+    ------------------------------- *@
     @{
         var isAuthenticated = Context.Session.GetString("Username") != null;
         var username = Context.Session.GetString("Username") ?? "";
@@ -89,7 +125,6 @@
         else if (role == "Manager") backUrl = Url.Action("Index", "Manager");
         else if (role == "HR") backUrl = Url.Action("Index", "HR");
 
-
         var controller = ViewContext.RouteData.Values["controller"]?.ToString();
         var action = ViewContext.RouteData.Values["action"]?.ToString();
 
@@ -100,15 +135,19 @@
             return (matchController && matchAction) ? "active" : "";
         };
     }
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+
+    <!-- NAVIGATION -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow-sm">
         <div class="container">
             <a class="navbar-brand" href="/">Contract Monthly Claim System</a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topnav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div id="topnav" class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-center">
+
                     @if (isAuthenticated)
                     {
                         <li class="nav-item">
@@ -119,35 +158,40 @@
                             <a class="nav-link @(isActive(role, "Index"))" href="@backUrl">Home</a>
                         </li>
 
-                        @* Role menus *@
+                        @* ROLE-BASED MENUS *@
                         @if (role == "Lecturer")
                         {
                             <li class="nav-item">
-                                <a class="nav-link @(isActive("Lecturer","SubmitClaim"))" href="/Lecturer/SubmitClaim">Submit Claim</a>
+                                <a class="nav-link @(isActive("Lecturer", "SubmitClaim"))" href="/Lecturer/SubmitClaim">Submit Claim</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link @(isActive("Lecturer","TrackClaims"))" href="/Lecturer/TrackClaims">Track Claims</a>
+                                <a class="nav-link @(isActive("Lecturer", "TrackClaims"))" href="/Lecturer/TrackClaims">Track Claims</a>
                             </li>
                         }
                         else if (role == "Coordinator")
                         {
                             <li class="nav-item">
-                                <a class="nav-link @(isActive("Coordinator","ClaimsList"))" href="/Coordinator/ClaimsList">Claims List</a>
+                                <a class="nav-link @(isActive("Coordinator", "ClaimsList"))" href="/Coordinator/ClaimsList">Claims List</a>
                             </li>
                         }
                         else if (role == "Manager")
                         {
                             <li class="nav-item">
-                                <a class="nav-link @(isActive("Manager","ClaimsList"))" href="/Manager/ClaimsList">Claims List</a>
+                                <a class="nav-link @(isActive("Manager", "ClaimsList"))" href="/Manager/ClaimsList">Claims List</a>
                             </li>
                         }
                         else if (role == "HR")
                         {
                             <li class="nav-item">
-                                <a class="nav-link @(isActive("HR","Dashboard"))" href="/HR/Dashboard">HR Dashboard</a>
+                                <a class="nav-link @(isActive("HR", "Index"))" href="/HR/Index">HR Dashboard</a>
                             </li>
                         }
 
+                        <li class="nav-item">
+                            <button id="themeToggle">
+                                <i class="bi bi-brightness-high-fill" id="themeIcon"></i>
+                            </button>
+                        </li>
 
                         <li class="nav-item">
                             <a class="nav-link logout" href="/Account/Logout">Logout</a>
@@ -163,5 +207,35 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        /* -------------------------------
+           DARK / LIGHT MODE SWITCH
+        -------------------------------- */
+        const html = document.documentElement;
+        const toggleBtn = document.getElementById("themeToggle");
+        const icon = document.getElementById("themeIcon");
+
+        // Load saved theme
+        const saved = localStorage.getItem("theme");
+        if (saved) html.setAttribute("data-theme", saved);
+
+        function updateIcon() {
+            if (html.getAttribute("data-theme") === "dark") {
+                icon.className = "bi bi-moon-stars-fill";
+            } else {
+                icon.className = "bi bi-brightness-high-fill";
+            }
+        }
+        updateIcon();
+
+        toggleBtn.addEventListener("click", () => {
+            let current = html.getAttribute("data-theme");
+            let next = current === "dark" ? "light" : "dark";
+            html.setAttribute("data-theme", next);
+            localStorage.setItem("theme", next);
+            updateIcon();
+        });
+    </script>
 </body>
 </html>

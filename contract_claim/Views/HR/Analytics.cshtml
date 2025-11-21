@@ -3,141 +3,185 @@
 @{
     ViewData["Title"] = "HR Analytics";
 
-    // Retrieve Year and Month safely
     int year = ViewBag.Year ?? DateTime.Now.Year;
-
-    int month = 0; // 0 = All Months
-    if (ViewBag.Month != null)
-        month = Convert.ToInt32(ViewBag.Month);
+    int month = ViewBag.Month != null ? Convert.ToInt32(ViewBag.Month) : 0;
 }
 
-<h2>HR Analytics</h2>
-<p class="text-muted">Overview of claim statuses, payouts and lecturer performance.</p>
-
-<!-- FILTER FORM -->
-<form method="get" class="mt-4 mb-4">
-    <div class="row">
-
-        <!-- YEAR -->
-        <div class="col-md-4">
-            <label>Year</label>
-            <input type="number" name="year"
-                   class="form-control"
-                   value="@year"
-                   min="2020"
-                   max="2100" />
-        </div>
-
-        <!-- MONTH -->
-        <div class="col-md-4">
-            <label>Month</label>
-            <select name="month" class="form-select">
-
-                @if (month == 0)
-                {
-                    <option value="" selected>All Months</option>
-                }
-                else
-                {
-                    <option value="">All Months</option>
-                }
-
-                @for (int m = 1; m <= 12; m++)
-                {
-                    if (month == m)
-                    {
-                        <option value="@m" selected>
-                            @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m)
-                        </option>
-                    }
-                    else
-                    {
-                        <option value="@m">
-                            @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m)
-                        </option>
-                    }
-                }
-
-            </select>
-</div>
-
-
-        <!-- FILTER BUTTON -->
-        <div class="col-md-4 d-flex align-items-end">
-            <button class="btn btn-primary w-100">Filter</button>
-        </div>
-    </div>
-</form>
-
-
-<!-- STAT CARDS -->
-<div class="row mt-4">
-    <div class="col-md-4">
-        <div class="p-3 bg-success text-white text-center rounded shadow-sm stat-card">
-            <h5>Approved</h5>
-            <h3>@ViewBag.Approved</h3>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="p-3 bg-warning text-dark text-center rounded shadow-sm stat-card">
-            <h5>Pending</h5>
-            <h3>@ViewBag.Pending</h3>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="p-3 bg-danger text-white text-center rounded shadow-sm stat-card">
-            <h5>Rejected</h5>
-            <h3>@ViewBag.Rejected</h3>
-        </div>
-    </div>
-</div>
-
-
-<!-- PIE CHART -->
-<div class="mt-4 d-flex justify-content-center">
-    <div style="max-width: 400px; width: 100%;">
-        <canvas id="statusPie"></canvas>
-    </div>
-</div>
-
-<!-- BAR CHART -->
-<div class="mt-5 d-flex justify-content-center">
-    <div style="max-width: 600px; width: 100%;">
-        <canvas id="payoutBar"></canvas>
-    </div>
-</div>
-
-<!-- LINE CHART -->
-<div class="mt-5 d-flex justify-content-center">
-    <div style="max-width: 800px; width: 100%;">
-        <canvas id="payoutLine"></canvas>
-    </div>
-</div>
-
-<!-- LECTURER COMPARISON -->
-<div class="mt-5 d-flex justify-content-center">
-    <div style="max-width: 800px; width: 100%;">
-        <canvas id="lecturerCompare"></canvas>
-    </div>
-</div>
-
+<!-- Bootstrap Icons -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 <style>
-    canvas { max-height: 300px !important; }
+    /* ---------- HERO ---------- */
+    .hero-glass {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        border-radius: 24px;
+        color: white;
+        padding: 32px 40px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+        margin-bottom: 40px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
 
-    .stat-card {
+    .hero-glass::after {
+        content: "";
+        position: absolute;
+        right: -40px;
+        top: -40px;
+        width: 160px;
+        height: 160px;
+        background: rgba(255,255,255,0.20);
+        filter: blur(4px);
+        border-radius: 50%;
+    }
+
+    /* ---------- GLASS CARDS ---------- */
+    .glass-card {
+        background: rgba(255,255,255,0.85);
+        backdrop-filter: blur(14px);
+        border-radius: 20px;
+        padding: 22px;
+        border: 1px solid rgba(255,255,255,0.65);
         transition: 0.25s ease;
-        cursor: pointer;
+        box-shadow: 0 10px 26px rgba(0,0,0,0.08);
     }
 
-    .stat-card:hover {
+    .glass-card:hover {
         transform: translateY(-6px);
-        box-shadow: 0 6px 18px rgba(0,0,0,0.28);
+        box-shadow: 0 18px 45px rgba(0,0,0,0.18);
     }
+
+    /* ---------- CHART CONTAINERS ---------- */
+    .chart-box {
+        background: rgba(255,255,255,0.9);
+        border-radius: 20px;
+        padding: 25px;
+        margin-top: 35px;
+        box-shadow: 0 12px 35px rgba(0,0,0,0.08);
+    }
+
+    canvas {
+        max-height: 320px !important;
+    }
+
 </style>
 
+
+<div class="container mt-4 mb-5">
+
+    <!-- HERO HEADER -->
+    <div class="hero-glass">
+        <h1 class="fw-bold">HR Analytics Dashboard 📊</h1>
+        <p class="mt-2">
+            View platform-wide statistics, payouts, approval rates, and lecturer performance trends.
+        </p>
+    </div>
+
+
+    <!-- FILTER FORM -->
+    <div class="glass-card mb-4">
+        <form method="get">
+            <div class="row g-4">
+
+                <div class="col-md-4">
+                    <label class="form-label">
+                        <i class="bi bi-calendar3"></i> Year
+                    </label>
+                    <input type="number" class="form-control" name="year"
+                           value="@year" min="2020" max="2100">
+                </div>
+
+                <div class="col-md-4"> <label>Month</label> <select name="month" class="form-select"> @if (month == 0)
+                        {
+                            <option value="" selected>All Months</option>
+                        }
+                        else
+                        {
+                            <option value="">All Months</option>
+                        } @for (int m = 1; m <= 12; m++)
+                        {
+                            if (month == m)
+                            {
+                                <option value="@m" selected> @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m) </option>
+                            }
+                            else
+                            {
+                                <option value="@m"> @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m) </option>
+                            }
+                        } </select> 
+                        </div>
+
+                <div class="col-md-4 d-flex align-items-end">
+                    <button class="btn btn-primary w-100 rounded-pill">
+                        <i class="bi bi-search"></i> Apply Filter
+                    </button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+
+    <!-- STAT CARDS -->
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="glass-card text-center">
+                <h6 class="text-success text-uppercase fw-bold">Approved</h6>
+                <h2 class="fw-bold text-dark">@ViewBag.Approved</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="glass-card text-center">
+                <h6 class="text-warning text-uppercase fw-bold">Pending</h6>
+                <h2 class="fw-bold text-dark">@ViewBag.Pending</h2>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="glass-card text-center">
+                <h6 class="text-danger text-uppercase fw-bold">Rejected</h6>
+                <h2 class="fw-bold text-dark">@ViewBag.Rejected</h2>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- PIE CHART -->
+    <div class="chart-box">
+        <h4 class="fw-bold mb-3"><i class="bi bi-pie-chart"></i> Claim Status Breakdown</h4>
+        <canvas id="statusPie"></canvas>
+    </div>
+
+
+    <!-- BAR CHART -->
+    <div class="chart-box">
+        <h4 class="fw-bold mb-3"><i class="bi bi-bar-chart"></i> Total Approved Payout</h4>
+        <canvas id="payoutBar"></canvas>
+    </div>
+
+
+    <!-- LINE CHART -->
+    <div class="chart-box">
+        <h4 class="fw-bold mb-3"><i class="bi bi-graph-up-arrow"></i> Monthly Payout Trend</h4>
+        <canvas id="payoutLine"></canvas>
+    </div>
+
+
+    <!-- COMPARISON CHART -->
+    <div class="chart-box">
+        <h4 class="fw-bold mb-3"><i class="bi bi-person-lines-fill"></i> Lecturer Payout Comparison</h4>
+        <canvas id="lecturerCompare"></canvas>
+    </div>
+
+</div>
+
+
+<!-- CHART.JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
@@ -148,40 +192,44 @@ new Chart(document.getElementById("statusPie"), {
         labels: ['Approved', 'Pending', 'Rejected'],
         datasets: [{
             data: [@ViewBag.Approved, @ViewBag.Pending, @ViewBag.Rejected],
-            backgroundColor: ['#198754', '#ffc107', '#dc3545']
+            backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
+            borderWidth: 2
         }]
     }
 });
+
 
 /* ---------------- BAR CHART ---------------- */
 new Chart(document.getElementById("payoutBar"), {
     type: 'bar',
     data: {
-        labels: ['Total Approved Payout'],
+        labels: ['Approved Payout'],
         datasets: [{
-            label: 'Rands',
+            label: 'Rands (ZAR)',
             data: [@ViewBag.TotalPayout],
-            backgroundColor: ['#0d6efd']
+            backgroundColor: '#0d6efd'
         }]
-    }
+    },
+    options: { plugins: { legend: { display: false } } }
 });
+
 
 /* ---------------- LINE CHART ---------------- */
 const payoutLabels = [
-@foreach (var group in Model
+@foreach (var g in Model
     .Where(c => c.Status == "Approved" && c.ApprovedDate.HasValue)
     .GroupBy(c => c.ApprovedDate.Value.ToString("yyyy-MM")))
 {
-@: "@group.Key",
+@: "@g.Key",
 }
 ];
 
 const payoutData = [
-@foreach (var group in Model
+@foreach (var g in Model
     .Where(c => c.Status == "Approved" && c.ApprovedDate.HasValue)
     .GroupBy(c => c.ApprovedDate.Value.ToString("yyyy-MM")))
 {
-@: @group.Sum(c => c.TotalAmount),
+@: @g.Sum(x => x.TotalAmount),
 }
 ];
 
@@ -190,29 +238,29 @@ new Chart(document.getElementById("payoutLine"), {
     data: {
         labels: payoutLabels,
         datasets: [{
-            label: "Payout Trend",
+            label: "Approved Payout Trend",
             data: payoutData,
-            borderColor: '#0d6efd',
-            backgroundColor: 'rgba(13,110,253,0.3)',
+            borderColor: '#007bff',
+            backgroundColor: 'rgba(0,123,255,0.25)',
             fill: true,
             tension: 0.3
         }]
     }
 });
 
+
 /* ---------------- LECTURER COMPARISON ---------------- */
 const lecturerLabels = [
-@foreach (var group in Model.Where(c => c.Status == "Approved").GroupBy(c => c.LecturerName))
+@foreach (var g in Model.Where(c => c.Status == "Approved").GroupBy(c => c.LecturerName))
 {
-@: "@group.Key",
+@: "@g.Key",
 }
 ];
 
 const lecturerTotals = [
-@foreach (var group in Model.Where(c => c.Status == "Approved")
-                            .GroupBy(c => c.LecturerName))
+@foreach (var g in Model.Where(c => c.Status == "Approved").GroupBy(c => c.LecturerName))
 {
-@: @group.Sum(x => x.TotalAmount),
+@: @g.Sum(x => x.TotalAmount),
 }
 ];
 
@@ -221,7 +269,7 @@ new Chart(document.getElementById("lecturerCompare"), {
     data: {
         labels: lecturerLabels,
         datasets: [{
-            label: "Approved Payout Per Lecturer",
+            label: "Approved Payout",
             data: lecturerTotals,
             backgroundColor: '#6610f2'
         }]
