@@ -1,6 +1,7 @@
 ﻿@model List<contract_claim.Models.Claim>
 @{
     ViewData["Title"] = "Coordinator - Claims List";
+
     var total = Model.Count;
     var approved = Model.Count(c => c.Status == "Approved");
     var pending = Model.Count(c => c.Status == "Pending");
@@ -16,94 +17,205 @@
     };
 }
 
-<div class="d-flex justify-content-around mb-4 text-center">
-    <div class="p-3 bg-primary text-white rounded shadow-sm">
-        <h5>Total</h5>
-        <h3>@total</h3>
-    </div>
-    <div class="p-3 bg-warning text-dark rounded shadow-sm">
-        <h5>Pending</h5>
-        <h3>@pending</h3>
-    </div>
-    <div class="p-3 bg-success text-white rounded shadow-sm">
-        <h5>Approved</h5>
-        <h3>@approved</h3>
-    </div>
-    <div class="p-3 bg-danger text-white rounded shadow-sm">
-        <h5>Rejected</h5>
-        <h3>@rejected</h3>
-    </div>
-</div>
+<style>
+    .stat-card {
+        background: rgba(255,255,255,0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 18px;
+        padding: 20px 25px;
+        border: 1px solid rgba(255,255,255,0.40);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.10);
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .stat-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 55px rgba(0,0,0,0.18);
+    }
+    .hero-glass {
+        background: linear-gradient(135deg, #00b4d8, #0096c7);
+        padding: 35px;
+        border-radius: 22px;
+        color: white;
+        box-shadow: 0 20px 45px rgba(0,0,0,0.15);
+        margin-bottom: 35px;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-glass::after {
+        content: "";
+        position: absolute;
+        right: -40px;
+        top: -40px;
+        width: 150px;
+        height: 150px;
+        background: rgba(255,255,255,0.23);
+        filter: blur(6px);
+        border-radius: 50%;
+    }
+    .glass-box {
+        background: rgba(255,255,255,0.85);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-radius: 20px;
+        padding: 25px;
+        border: 1px solid rgba(255,255,255,0.5);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+        transition: .25s ease;
+    }
+    .glass-box:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 18px 50px rgba(0,0,0,0.18);
+    }
+    table thead {
+        background: #343a40;
+        color: white;
+        font-size: .9rem;
+    }
+
+    table tbody tr:hover {
+        background-color: rgba(0, 123, 255, 0.06);
+    }
+    .status-pill {
+        padding: 6px 12px;
+        border-radius: 50px;
+        font-weight: 600;
+        font-size: .85rem;
+    }
+    .pending { background: rgba(255,193,7,.2); color: #795900; }
+    .approved { background: rgba(40,167,69,.2); color: #155724; }
+    .rejected { background: rgba(220,53,69,.2); color: #842029; }
+    .pill-btn {
+        border-radius: 50px;
+        padding: 6px 14px;
+        font-size: .85rem;
+        font-weight: 500;
+    }
+</style>
+
 
 <div class="container mt-4">
+
+    <div class="hero-glass">
+        <h2 class="fw-bold">Coordinator Claims Overview</h2>
+        <p class="mt-1">Review and manage lecturer submissions for your department.</p>
+    </div>
+
+    <div class="row text-center mb-4 g-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6 class="text-primary text-uppercase fw-bold">Total</h6>
+                <h2 class="fw-bold text-dark">@total</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6 class="text-warning text-uppercase fw-bold">Pending</h6>
+                <h2 class="fw-bold text-dark">@pending</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6 class="text-success text-uppercase fw-bold">Approved</h6>
+                <h2 class="fw-bold text-dark">@approved</h2>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h6 class="text-danger text-uppercase fw-bold">Rejected</h6>
+                <h2 class="fw-bold text-dark">@rejected</h2>
+            </div>
+        </div>
+    </div>
+
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="mb-0 text-center">Submitted Claims</h2>
-        <a href="@backUrl" class="btn btn-outline-secondary">⬅ Back</a>
+        <h3 class="fw-bold">Submitted Claims</h3>
+        <a href="@backUrl" class="btn btn-outline-secondary pill-btn">⬅ Back</a>
     </div>
 
     @if (!Model.Any())
     {
-        <div class="alert alert-info text-center">No claims have been submitted yet.</div>
+        <div class="glass-box text-center">
+            <h5 class="text-muted">No claims have been submitted yet.</h5>
+        </div>
     }
     else
     {
-        <table class="table table-striped table-hover align-middle shadow-sm">
-            <thead class="table-dark">
-                <tr>
-                    <th>Lecturer Name</th>
-                    <th>Hours Worked</th>
-                    <th>Hourly Rate</th>
-                    <th>Total Amount</th>
-                    <th>Notes</th>
-                    <th>Document</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var claim in Model)
-                {
+        <div class="glass-box">
+            <table class="table table-hover align-middle">
+                <thead>
                     <tr>
-                        <td>@claim.LecturerName</td>
-                        <td>@claim.HoursWorked</td>
-                        <td>@claim.HourlyRate</td>
-                        <td>@claim.TotalAmount.ToString("C")</td>
-                        <td>@claim.Notes</td>
-                        <td>
-                            @if (!string.IsNullOrEmpty(claim.FileName))
-                            {
-                                <a href="/uploads/@claim.FileName" target="_blank" class="text-decoration-none">View</a>
-                            }
-                            else
-                            {
-                                <span class="text-muted">N/A</span>
-                            }
-                        </td>
-                        <td>
-                            <span class="fw-bold @(claim.Status == "Pending" ? "text-warning"
-                                : claim.Status == "Approved" ? "text-success"
-                                : "text-danger")">@claim.Status</span>
-                        </td>
-                        <td>
-                            @if (claim.Status == "Pending")
-                            {
-                                <form method="post" asp-action="Approve" class="d-inline" onsubmit="return confirmAction('approve');">
-                                    <input type="hidden" name="id" value="@claim.Id" />
-                                    <button type="submit" class="btn btn-success btn-sm">Approve</button>
-                                </form>
-                                <form method="post" asp-action="Reject" class="d-inline ms-1" onsubmit="return confirmAction('reject');">
-                                    <input type="hidden" name="id" value="@claim.Id" />
-                                    <button type="submit" class="btn btn-danger btn-sm">Reject</button>
-                                </form>
-                            }
-                            else
-                            {
-                                <span class="text-muted">Action taken</span>
-                            }
-                        </td>
+                        <th>Lecturer</th>
+                        <th>Hours</th>
+                        <th>Rate</th>
+                        <th>Total</th>
+                        <th>Notes</th>
+                        <th>Document</th>
+                        <th>Status</th>
+                        <th style="min-width: 160px;">Actions</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+
+                <tbody>
+                    @foreach (var claim in Model)
+                    {
+                        <tr>
+                            <td>@claim.LecturerName</td>
+                            <td>@claim.HoursWorked</td>
+                            <td>R @claim.HourlyRate</td>
+                            <td><strong>R @claim.TotalAmount.ToString("N2")</strong></td>
+                            <td>@claim.Notes</td>
+
+                            <td>
+                                @if (!string.IsNullOrEmpty(claim.FileName))
+                                {
+                                    <a class="fw-semibold text-primary" target="_blank" href="/uploads/@claim.FileName">View</a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">N/A</span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (claim.Status == "Pending")
+                                {
+                                    <span class="status-pill pending">Pending</span>
+                                }
+                                else if (claim.Status == "Approved")
+                                {
+                                    <span class="status-pill approved">Approved</span>
+                                }
+                                else
+                                {
+                                    <span class="status-pill rejected">Rejected</span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (claim.Status == "Pending")
+                                {
+                                    <form method="post" asp-action="Approve" class="d-inline">
+                                        <input type="hidden" name="id" value="@claim.Id" />
+                                        <button class="btn btn-success btn-sm pill-btn">Approve</button>
+                                    </form>
+
+                                    <form method="post" asp-action="Reject" class="d-inline ms-1">
+                                        <input type="hidden" name="id" value="@claim.Id" />
+                                        <button class="btn btn-danger btn-sm pill-btn">Reject</button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">Action Completed</span>
+                                }
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     }
 </div>
