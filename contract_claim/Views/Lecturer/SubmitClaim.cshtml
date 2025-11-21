@@ -2,52 +2,150 @@
     ViewData["Title"] = "Submit Claim";
 }
 
-<div class="form-container">
-    <h2 class="mb-4">Submit Monthly Claim</h2>
-
-    @if (ViewBag.Error != null)
-    {
-        <p class="error">@ViewBag.Error</p>
+<style>
+    .page-wrapper {
+        max-width: 750px;
+        margin: 50px auto;
     }
-    @if (ViewBag.Message != null)
-    {
-        <p class="success">@ViewBag.Message</p>
+    .mini-hero {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        padding: 28px 20px;
+        border-radius: 22px;
+        color: white;
+        text-align: center;
+        font-weight: 500;
+        margin-bottom: 32px;
+        box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+        position: relative;
+        overflow: hidden;
     }
 
-    <form method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
-        <div class="mb-3">
-            <label class="form-label">Hours Worked</label>
-            <input type="number" step="0.01" id="hours" name="HoursWorked" class="form-control" required />
-        </div>
+        .mini-hero::after {
+            content: "";
+            position: absolute;
+            right: -35px;
+            top: -35px;
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            filter: blur(4px);
+        }
 
-        <div class="mb-3">
-            <label class="form-label">Hourly Rate</label>
-            <input type="number" step="0.01" id="rate" name="HourlyRate" class="form-control" required />
-        </div>
+    /* -------------------------------------
+           GLASS FORM CARD
+           ------------------------------------- */
+    .glass-form {
+        background: rgba(255,255,255,0.85);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-radius: 22px;
+        padding: 30px;
+        border: 1px solid rgba(255,255,255,0.55);
+        box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+    }
 
-        <div class="mb-3">
-            <label class="form-label">Total Amount (Auto-Calculated)</label>
-            <input type="number" step="0.01" id="total" class="form-control" readonly />
-        </div>
+        /* -------------------------------------
+           FORM LABELS
+           ------------------------------------- */
+        .glass-form .form-label {
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
 
-        <div class="mb-3">
-            <label class="form-label">Notes</label>
-            <textarea name="Notes" class="form-control"></textarea>
-        </div>
+    /* -------------------------------------
+           BUTTON STYLES (Pill Design)
+           ------------------------------------- */
+    .pill-btn {
+        border-radius: 50px;
+        padding: 10px 22px;
+        font-size: 1rem;
+        font-weight: 500;
+    }
 
-        <div class="mb-3">
-            <label class="form-label">Upload Supporting Document (.pdf, .docx, .xlsx)</label>
-            <input type="file" name="file" class="form-control" />
-        </div>
+    .btn-primary.pill-btn {
+        background: #0d6efd;
+        border: none;
+    }
 
-        <button type="submit" class="btn btn-primary w-100">Submit Claim</button>
-    </form>
+    .btn-outline-secondary.pill-btn {
+        border-radius: 50px;
+    }
 
-    <div class="mt-3">
-        <a href="/Lecturer/Index" class="btn btn-outline-secondary w-100">⬅ Back to Dashboard</a>
+    .error {
+        background: #f8d7da;
+        padding: 10px;
+        border-radius: 12px;
+        color: #842029;
+    }
+
+    .success {
+        background: #d1e7dd;
+        padding: 10px;
+        border-radius: 12px;
+        color: #0f5132;
+    }
+</style>
+
+
+<div class="page-wrapper">
+    <div class="mini-hero">
+        <h2 class="fw-bold">Submit Monthly Claim</h2>
+        <p class="m-0">Fill in your work hours and upload supporting documents.</p>
     </div>
 
+    <div class="glass-form">
+
+        @if (ViewBag.Error != null)
+        {
+            <p class="error">@ViewBag.Error</p>
+        }
+        @if (ViewBag.Message != null)
+        {
+            <p class="success">@ViewBag.Message</p>
+        }
+
+        <form method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+
+            <div class="mb-3">
+                <label class="form-label">Hours Worked</label>
+                <input type="number" step="0.01" id="hours" name="HoursWorked" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Hourly Rate</label>
+                <input type="number" step="0.01" id="rate" name="HourlyRate" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Total Amount (Auto-Calculated)</label>
+                <input type="number" step="0.01" id="total" class="form-control" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Notes</label>
+                <textarea name="Notes" class="form-control"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Upload Supporting Document (.pdf, .docx, .xlsx)</label>
+                <input type="file" name="file" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 pill-btn">
+                Submit Claim
+            </button>
+        </form>
+
+        <div class="mt-3">
+            <a href="/Lecturer/Index" class="btn btn-outline-secondary w-100 pill-btn">
+                ⬅ Back to Dashboard
+            </a>
+        </div>
+
+    </div>
 </div>
+
 
 <script>
     function updateTotal() {
