@@ -9,104 +9,188 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 
     <style>
+
         /* -----------------------------------
-           THEME VARIABLES (LIGHT + DARK)
-        ----------------------------------- */
+               THEME COLOR VARIABLES
+               (Everything in the site uses these)
+            ----------------------------------- */
         :root {
             --bg: #ffffff;
             --text: #212529;
-            --nav-bg: #343a40;
-            --nav-item-bg: #495057;
-            --nav-hover: #0d6efd;
-            --nav-border: rgba(255, 255, 255, .15);
+            --card-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.08);
+            --card-shadow: rgba(0, 0, 0, 0.12);
+            --table-bg: #ffffff;
+            --table-text: #212529;
+            --table-border: rgba(0, 0, 0, 0.15);
+            --input-bg: #ffffff;
+            --input-border: rgba(0, 0, 0, 0.20);
+            --input-text: #212529;
+            --hero-bg: linear-gradient(135deg, #0d6efd, #1e90ff);
+            --hero-text: #ffffff;
+            --nav-bg-light: rgba(255,255,255,0.18);
+            --nav-border-light: rgba(255,255,255,0.35);
+            --nav-text-light: #212529;
+            --nav-hover: rgba(255,255,255,0.35);
         }
 
+        /* -------------------------
+               DARK MODE VALUES
+            -------------------------- */
         [data-theme="dark"] {
-            --bg: #1e1e1e;
+            --bg: #121212;
             --text: #e9ecef;
-            --nav-bg: #111;
-            --nav-item-bg: #222;
-            --nav-hover: #0d6efd;
-            --nav-border: rgba(255, 255, 255, .25);
+            --card-bg: rgba(255,255,255,0.06);
+            --card-border: rgba(255,255,255,0.12);
+            --card-shadow: rgba(0, 0, 0, 0.55);
+            --table-bg: rgba(255,255,255,0.05);
+            --table-text: #f1f1f1;
+            --table-border: rgba(255,255,255,0.12);
+            --input-bg: rgba(255,255,255,0.08);
+            --input-border: rgba(255,255,255,0.18);
+            --input-text: #f8f9fa;
+            --hero-bg: linear-gradient(135deg, #0a58ca, #0d6efd);
+            --hero-text: #e9ecef;
+            --nav-bg-light: rgba(20,20,20,0.45);
+            --nav-border-light: rgba(255,255,255,0.12);
+            --nav-text-light: #e9ecef;
+            --nav-hover: rgba(255,255,255,0.25);
         }
 
         /* -----------------------------------
-           GLOBAL STYLES
-        ----------------------------------- */
+               GLOBAL BODY STYLES
+            ----------------------------------- */
         body {
-            padding-top: 72px;
             background: var(--bg);
             color: var(--text);
+            padding-top: 72px;
             transition: background .25s ease, color .25s ease;
         }
 
         /* -----------------------------------
-           NAVIGATION BAR
-        ----------------------------------- */
-        .navbar {
-            background-color: var(--nav-bg) !important;
-            transition: background .25s ease;
-        }
-
-        .navbar-brand {
-            color: #fff !important;
-            font-weight: 600;
-        }
-
-        .navbar .nav-text {
-            color: #fff;
-            opacity: .9;
-            padding: 6px 12px;
-            margin-right: 6px;
-            border: 1px solid var(--nav-border);
-            border-radius: 6px;
+               NAVBAR (Glassmorphism)
+            ----------------------------------- */
+        .navbar-glass {
+            background: var(--nav-bg-light);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid var(--nav-border-light);
+            border-radius: 0 0 18px 18px;
+            box-shadow: 0 6px 26px var(--card-shadow);
+            transition: background .25s, border .25s, box-shadow .25s;
         }
 
         .navbar .nav-link {
-            background-color: var(--nav-item-bg);
-            border-radius: 6px;
-            margin-left: 6px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid var(--nav-border-light);
+            border-radius: 12px;
+            color: var(--nav-text-light) !important;
+            margin-left: 8px;
+            padding: 6px 14px;
+            font-weight: 500;
+            transition: .22s;
+        }
+
+            .navbar .nav-link:hover {
+                background: var(--nav-hover);
+            }
+
+            .navbar .nav-link.active {
+                background: rgba(13,110,253,0.9);
+                border-color: #0d6efd;
+                color: white !important;
+            }
+
+        .nav-text {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid var(--nav-border-light);
             padding: 6px 12px;
-            color: #fff !important;
-            transition: .2s;
+            border-radius: 12px;
+            margin-right: 6px;
+            color: var(--nav-text-light);
         }
 
-        .navbar .nav-link:hover {
-            background-color: var(--nav-hover);
-        }
-
-        .navbar .nav-link.active {
-            background-color: var(--nav-hover);
-            font-weight: 700;
-        }
-
-        .navbar .nav-link.logout {
-            background-color: #dc3545;
-        }
-
-        .navbar .nav-link.logout:hover {
-            background-color: #b52a33;
-        }
-
-        /* Toggle button */
+        /* Toggle Button */
         #themeToggle {
-            background: transparent;
-            border: 1px solid var(--nav-border);
-            color: #fff;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid var(--nav-border-light);
             border-radius: 50%;
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            margin-left: 12px;
+            align-items: center;
+            color: var(--nav-text-light);
             cursor: pointer;
             transition: .2s;
         }
 
-        #themeToggle:hover {
-            background: var(--nav-hover);
+            #themeToggle:hover {
+                background: var(--nav-hover);
+            }
+
+        /* -----------------------------
+               GLOBAL CARDS (ALL DASHBOARDS)
+            ------------------------------ */
+        .card,
+        .stat-card,
+        .glass-card {
+            background: var(--card-bg) !important;
+            border: 1px solid var(--card-border) !important;
+            box-shadow: 0 4px 18px var(--card-shadow) !important;
+            border-radius: 16px !important;
+            transition: background .25s, color .25s, border .25s;
+            color: var(--text);
         }
+
+        /* -----------------------------
+               FORMS + INPUTS
+            ------------------------------ */
+        input, select, textarea {
+            background: var(--input-bg) !important;
+            color: var(--input-text) !important;
+            border: 1px solid var(--input-border) !important;
+        }
+
+            input:focus, select:focus, textarea:focus {
+                outline: none !important;
+                border-color: #0d6efd !important;
+                box-shadow: 0 0 0 3px rgba(13,110,253,0.35) !important;
+            }
+
+        /* -----------------------------
+               TABLES
+            ------------------------------ */
+        table {
+            background: var(--table-bg) !important;
+            color: var(--table-text) !important;
+        }
+
+            table th, table td {
+                border-color: var(--table-border) !important;
+            }
+
+        thead.table-dark {
+            background: rgba(0,0,0,0.35) !important;
+            color: #fff !important;
+        }
+
+        [data-theme="dark"] thead.table-dark {
+            background: rgba(255,255,255,0.1) !important;
+        }
+
+        /* -----------------------------
+               HERO / BANNERS
+            ------------------------------ */
+        .hero-section {
+            background: var(--hero-bg);
+            color: var(--hero-text);
+            padding: 50px;
+            border-radius: 22px;
+            box-shadow: 0 8px 28px var(--card-shadow);
+            transition: background .25s ease;
+        }
+
     </style>
 </head>
 
@@ -138,68 +222,70 @@
 
     <!-- NAVIGATION -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="/">Contract Monthly Claim System</a>
+        <nav class="navbar navbar-expand-lg fixed-top navbar-glass">
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="/">CMCS</a>
 
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topnav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topnav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-            <div id="topnav" class="collapse navbar-collapse">
-                <ul class="navbar-nav ms-auto align-items-center">
+                <div id="topnav" class="collapse navbar-collapse">
+                    <ul class="navbar-nav ms-auto align-items-center">
 
-                    @if (isAuthenticated)
-                    {
-                        <li class="nav-item">
-                            <span class="nav-text">Hello, @username</span>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link @(isActive(role, "Index"))" href="@backUrl">Home</a>
-                        </li>
-
-                        @* ROLE-BASED MENUS *@
-                        @if (role == "Lecturer")
+                        @if (isAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link @(isActive("Lecturer", "SubmitClaim"))" href="/Lecturer/SubmitClaim">Submit Claim</a>
+                                <span class="nav-text">Hello, @username</span>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link @(isActive("Lecturer", "TrackClaims"))" href="/Lecturer/TrackClaims">Track Claims</a>
-                            </li>
-                        }
-                        else if (role == "Coordinator")
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link @(isActive("Coordinator", "ClaimsList"))" href="/Coordinator/ClaimsList">Claims List</a>
-                            </li>
-                        }
-                        else if (role == "Manager")
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link @(isActive("Manager", "ClaimsList"))" href="/Manager/ClaimsList">Claims List</a>
-                            </li>
-                        }
-                        else if (role == "HR")
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link @(isActive("HR", "Index"))" href="/HR/Index">HR Dashboard</a>
-                            </li>
-                        }
 
-                        <li class="nav-item">
-                            <button id="themeToggle">
-                                <i class="bi bi-brightness-high-fill" id="themeIcon"></i>
-                            </button>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(isActive(role, "Index"))" href="@backUrl">Home</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link logout" href="/Account/Logout">Logout</a>
-                        </li>
-                    }
-                </ul>
+                            @if (role == "Lecturer")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link @(isActive("Lecturer","SubmitClaim"))" href="/Lecturer/SubmitClaim">Submit Claim</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link @(isActive("Lecturer","TrackClaims"))" href="/Lecturer/TrackClaims">Track Claims</a>
+                                </li>
+                            }
+                            else if (role == "Coordinator")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link @(isActive("Coordinator","ClaimsList"))" href="/Coordinator/ClaimsList">Claims List</a>
+                                </li>
+                            }
+                            else if (role == "Manager")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link @(isActive("Manager","ClaimsList"))" href="/Manager/ClaimsList">Claims List</a>
+                                </li>
+                            }
+                            else if (role == "HR")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link @(isActive("HR","Index"))" href="/HR/Index">HR Dashboard</a>
+                                </li>
+                            }
+
+                            <li class="nav-item">
+                                <button id="themeToggle">
+                                    <i id="themeIcon" class="bi bi-brightness-high-fill"></i>
+                                </button>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link logout" href="/Account/Logout">Logout</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
             </div>
-        </div>
+        </nav>
+
     </nav>
 
     <div class="container">

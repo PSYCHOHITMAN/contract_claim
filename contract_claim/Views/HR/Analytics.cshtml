@@ -1,278 +1,188 @@
-﻿@model List<contract_claim.Models.Claim>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Contract Claim</title>
 
-@{
-    ViewData["Title"] = "HR Analytics";
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 
-    int year = ViewBag.Year ?? DateTime.Now.Year;
-    int month = ViewBag.Month != null ? Convert.ToInt32(ViewBag.Month) : 0;
-}
+    <style>
+        body {
+            padding-top: 80px;
+            background: #f5f7fb;
+            color: #212529;
+        }
 
-<!-- Bootstrap Icons -->
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+        /* ------------------------------------
+                   GLASSMORPHISM NAVBAR
+                ------------------------------------- */
+        .navbar-glass {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 4px 26px rgba(0, 0, 0, 0.12);
+            border-radius: 0 0 18px 18px;
+        }
 
-<style>
-    /* ---------- HERO ---------- */
-    .hero-glass {
-        background: linear-gradient(135deg, #007bff, #00c6ff);
-        border-radius: 24px;
-        color: white;
-        padding: 32px 40px;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.18);
-        margin-bottom: 40px;
-        text-align: center;
-        position: relative;
-        overflow: hidden;
+        .navbar .nav-link {
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 6px 14px;
+            border-radius: 12px;
+            margin-left: 8px;
+            font-weight: 500;
+            color: #212529 !important;
+            transition: 0.25s ease;
+        }
+
+            .navbar .nav-link:hover {
+                background: rgba(255, 255, 255, 0.55);
+            }
+
+            .navbar .nav-link.active {
+                background: #0d6efd;
+                border-color: #0d6efd;
+                color: #fff !important;
+            }
+
+            .navbar .nav-link.logout {
+                background: rgba(220, 53, 69, 0.85);
+                border-color: #dc3545;
+                color: #fff !important;
+            }
+
+        .nav-text {
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 6px 12px;
+            border-radius: 12px;
+            margin-right: 8px;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .form-card {
+            max-width: 400px;
+            margin: 50px auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    @* ------------------------------
+       SESSION LOGIC
+    ------------------------------- *@
+    @{
+        var isAuthenticated = Context.Session.GetString("Username") != null;
+        var username = Context.Session.GetString("Username") ?? "";
+        var role = Context.Session.GetString("Role") ?? "";
+
+        // Redirect role to appropriate home page
+        string backUrl = Url.Action("Login", "Account");
+        if (role == "Lecturer") backUrl = Url.Action("Index", "Lecturer");
+        else if (role == "Coordinator") backUrl = Url.Action("Index", "Coordinator");
+        else if (role == "Manager") backUrl = Url.Action("Index", "Manager");
+        else if (role == "HR") backUrl = Url.Action("Index", "HR");
+
+        var controller = ViewContext.RouteData.Values["controller"]?.ToString();
+        var action = ViewContext.RouteData.Values["action"]?.ToString();
+
+        Func<string, string, string> isActive = (c, a) =>
+        {
+            bool matchC = string.Equals(controller, c, StringComparison.OrdinalIgnoreCase);
+            bool matchA = string.IsNullOrEmpty(a) || string.Equals(action, a, StringComparison.OrdinalIgnoreCase);
+            return (matchC && matchA) ? "active" : "";
+        };
     }
 
-    .hero-glass::after {
-        content: "";
-        position: absolute;
-        right: -40px;
-        top: -40px;
-        width: 160px;
-        height: 160px;
-        background: rgba(255,255,255,0.20);
-        filter: blur(4px);
-        border-radius: 50%;
-    }
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg fixed-top navbar-glass">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/">CMCS</a>
 
-    /* ---------- GLASS CARDS ---------- */
-    .glass-card {
-        background: rgba(255,255,255,0.85);
-        backdrop-filter: blur(14px);
-        border-radius: 20px;
-        padding: 22px;
-        border: 1px solid rgba(255,255,255,0.65);
-        transition: 0.25s ease;
-        box-shadow: 0 10px 26px rgba(0,0,0,0.08);
-    }
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#topnav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-    .glass-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 18px 45px rgba(0,0,0,0.18);
-    }
+            <div id="topnav" class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto align-items-center">
 
-    /* ---------- CHART CONTAINERS ---------- */
-    .chart-box {
-        background: rgba(255,255,255,0.9);
-        border-radius: 20px;
-        padding: 25px;
-        margin-top: 35px;
-        box-shadow: 0 12px 35px rgba(0,0,0,0.08);
-    }
+                    @if (isAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <span class="nav-text">Hello, @username</span>
+                        </li>
 
-    canvas {
-        max-height: 320px !important;
-    }
+                        <li class="nav-item">
+                            <a class="nav-link @(isActive(role, "Index"))" href="@backUrl">
+                                Home
+                            </a>
+                        </li>
 
-</style>
-
-
-<div class="container mt-4 mb-5">
-
-    <!-- HERO HEADER -->
-    <div class="hero-glass">
-        <h1 class="fw-bold">HR Analytics Dashboard 📊</h1>
-        <p class="mt-2">
-            View platform-wide statistics, payouts, approval rates, and lecturer performance trends.
-        </p>
-    </div>
-
-
-    <!-- FILTER FORM -->
-    <div class="glass-card mb-4">
-        <form method="get">
-            <div class="row g-4">
-
-                <div class="col-md-4">
-                    <label class="form-label">
-                        <i class="bi bi-calendar3"></i> Year
-                    </label>
-                    <input type="number" class="form-control" name="year"
-                           value="@year" min="2020" max="2100">
-                </div>
-
-                <div class="col-md-4"> <label>Month</label> <select name="month" class="form-select"> @if (month == 0)
+                        @if (role == "Lecturer")
                         {
-                            <option value="" selected>All Months</option>
+                            <li class="nav-item">
+                                <a class="nav-link @(isActive("Lecturer","SubmitClaim"))" href="/Lecturer/SubmitClaim">
+                                    Submit Claim
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(isActive("Lecturer","TrackClaims"))" href="/Lecturer/TrackClaims">
+                                    Track Claims
+                                </a>
+                            </li>
                         }
-                        else
+                        else if (role == "Coordinator")
                         {
-                            <option value="">All Months</option>
-                        } @for (int m = 1; m <= 12; m++)
+                            <li class="nav-item">
+                                <a class="nav-link @(isActive("Coordinator","ClaimsList"))" href="/Coordinator/ClaimsList">Claims List</a>
+                            </li>
+                        }
+                        else if (role == "Manager")
                         {
-                            if (month == m)
-                            {
-                                <option value="@m" selected> @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m) </option>
-                            }
-                            else
-                            {
-                                <option value="@m"> @System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(m) </option>
-                            }
-                        } </select> 
-                        </div>
+                            <li class="nav-item">
+                                <a class="nav-link @(isActive("Manager","ClaimsList"))" href="/Manager/ClaimsList">Claims List</a>
+                            </li>
+                        }
+                        else if (role == "HR")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(isActive("HR","Index"))" href="/HR/Index">HR Dashboard</a>
+                            </li>
+                        }
 
-                <div class="col-md-4 d-flex align-items-end">
-                    <button class="btn btn-primary w-100 rounded-pill">
-                        <i class="bi bi-search"></i> Apply Filter
-                    </button>
-                </div>
-
-            </div>
-        </form>
-    </div>
-
-
-    <!-- STAT CARDS -->
-    <div class="row g-4">
-
-        <div class="col-md-4">
-            <div class="glass-card text-center">
-                <h6 class="text-success text-uppercase fw-bold">Approved</h6>
-                <h2 class="fw-bold text-dark">@ViewBag.Approved</h2>
+                        <li class="nav-item">
+                            <a class="nav-link logout" href="/Account/Logout">Logout</a>
+                        </li>
+                    }
+                </ul>
             </div>
         </div>
+    </nav>
 
-        <div class="col-md-4">
-            <div class="glass-card text-center">
-                <h6 class="text-warning text-uppercase fw-bold">Pending</h6>
-                <h2 class="fw-bold text-dark">@ViewBag.Pending</h2>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="glass-card text-center">
-                <h6 class="text-danger text-uppercase fw-bold">Rejected</h6>
-                <h2 class="fw-bold text-dark">@ViewBag.Rejected</h2>
-            </div>
-        </div>
-
+    <div class="container">
+        @RenderBody()
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-    <!-- PIE CHART -->
-    <div class="chart-box">
-        <h4 class="fw-bold mb-3"><i class="bi bi-pie-chart"></i> Claim Status Breakdown</h4>
-        <canvas id="statusPie"></canvas>
-    </div>
-
-
-    <!-- BAR CHART -->
-    <div class="chart-box">
-        <h4 class="fw-bold mb-3"><i class="bi bi-bar-chart"></i> Total Approved Payout</h4>
-        <canvas id="payoutBar"></canvas>
-    </div>
-
-
-    <!-- LINE CHART -->
-    <div class="chart-box">
-        <h4 class="fw-bold mb-3"><i class="bi bi-graph-up-arrow"></i> Monthly Payout Trend</h4>
-        <canvas id="payoutLine"></canvas>
-    </div>
-
-
-    <!-- COMPARISON CHART -->
-    <div class="chart-box">
-        <h4 class="fw-bold mb-3"><i class="bi bi-person-lines-fill"></i> Lecturer Payout Comparison</h4>
-        <canvas id="lecturerCompare"></canvas>
-    </div>
-
-</div>
-
-
-<!-- CHART.JS -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<script>
-/* ---------------- PIE CHART ---------------- */
-new Chart(document.getElementById("statusPie"), {
-    type: 'pie',
-    data: {
-        labels: ['Approved', 'Pending', 'Rejected'],
-        datasets: [{
-            data: [@ViewBag.Approved, @ViewBag.Pending, @ViewBag.Rejected],
-            backgroundColor: ['#28a745', '#ffc107', '#dc3545'],
-            borderWidth: 2
-        }]
-    }
-});
-
-
-/* ---------------- BAR CHART ---------------- */
-new Chart(document.getElementById("payoutBar"), {
-    type: 'bar',
-    data: {
-        labels: ['Approved Payout'],
-        datasets: [{
-            label: 'Rands (ZAR)',
-            data: [@ViewBag.TotalPayout],
-            backgroundColor: '#0d6efd'
-        }]
-    },
-    options: { plugins: { legend: { display: false } } }
-});
-
-
-/* ---------------- LINE CHART ---------------- */
-const payoutLabels = [
-@foreach (var g in Model
-    .Where(c => c.Status == "Approved" && c.ApprovedDate.HasValue)
-    .GroupBy(c => c.ApprovedDate.Value.ToString("yyyy-MM")))
-{
-@: "@g.Key",
-}
-];
-
-const payoutData = [
-@foreach (var g in Model
-    .Where(c => c.Status == "Approved" && c.ApprovedDate.HasValue)
-    .GroupBy(c => c.ApprovedDate.Value.ToString("yyyy-MM")))
-{
-@: @g.Sum(x => x.TotalAmount),
-}
-];
-
-new Chart(document.getElementById("payoutLine"), {
-    type: 'line',
-    data: {
-        labels: payoutLabels,
-        datasets: [{
-            label: "Approved Payout Trend",
-            data: payoutData,
-            borderColor: '#007bff',
-            backgroundColor: 'rgba(0,123,255,0.25)',
-            fill: true,
-            tension: 0.3
-        }]
-    }
-});
-
-
-/* ---------------- LECTURER COMPARISON ---------------- */
-const lecturerLabels = [
-@foreach (var g in Model.Where(c => c.Status == "Approved").GroupBy(c => c.LecturerName))
-{
-@: "@g.Key",
-}
-];
-
-const lecturerTotals = [
-@foreach (var g in Model.Where(c => c.Status == "Approved").GroupBy(c => c.LecturerName))
-{
-@: @g.Sum(x => x.TotalAmount),
-}
-];
-
-new Chart(document.getElementById("lecturerCompare"), {
-    type: 'bar',
-    data: {
-        labels: lecturerLabels,
-        datasets: [{
-            label: "Approved Payout",
-            data: lecturerTotals,
-            backgroundColor: '#6610f2'
-        }]
-    }
-});
-</script>
+</body>
+</html>
