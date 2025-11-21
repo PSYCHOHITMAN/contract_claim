@@ -1,84 +1,204 @@
 ﻿@model List<contract_claim.Models.Claim>
 @{
-    ViewData["Title"] = "TrackClaims";
+    ViewData["Title"] = "Track Claims";
 }
 
-<h2 class="mb-4">My Claims</h2>
+<style>
+    .page-wrapper {
+        max-width: 1100px;
+        margin: 40px auto;
+    }
 
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        @TempData["Message"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    .mini-hero {
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        padding: 26px;
+        border-radius: 22px;
+        color: white;
+        text-align: center;
+        box-shadow: 0 14px 40px rgba(0,0,0,0.18);
+        margin-bottom: 28px;
+        font-weight: 500;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .mini-hero::after {
+        content: "";
+        position: absolute;
+        right: -40px;
+        top: -40px;
+        width: 140px;
+        height: 140px;
+        background: rgba(255,255,255,0.22);
+        border-radius: 50%;
+        filter: blur(5px);
+    }
+
+    .glass-card {
+        background: rgba(255,255,255,0.85);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border-radius: 20px;
+        padding: 20px;
+        border: 1px solid rgba(255,255,255,0.45);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    }
+
+    .glass-table {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .glass-table thead {
+        background: rgba(0, 123, 255, 0.1);
+        backdrop-filter: blur(4px);
+        font-weight: 600;
+    }
+
+    .glass-table tbody tr:hover {
+        background: rgba(0, 123, 255, 0.06);
+        transition: 0.2s;
+    }
+
+    .pill-btn {
+        border-radius: 50px;
+        padding: 8px 20px;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+    .btn-outline-secondary.pill-btn {
+        border-radius: 50px;
+    }
+
+    .btn-danger.pill-btn {
+        border-radius: 50px;
+    }
+
+    .status-pending {
+        background: #ffc107;
+        color: #212529;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .status-approved {
+        background: #28a745;
+        color: white;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .status-rejected {
+        background: #dc3545;
+        color: white;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+</style>
+
+
+<div class="page-wrapper">
+
+    <div class="mini-hero">
+        <h2 class="fw-bold m-0">My Submitted Claims</h2>
+        <p class="m-0 mt-1">Review, track, and manage your monthly claim submissions.</p>
     </div>
-}
 
-@if (!Model.Any())
-{
-    <p>No claims submitted yet.</p>
-}
-else
-{
-    <div class="d-flex justify-content-between mb-3">
-        <a href="/Lecturer/Index" class="btn btn-outline-secondary">⬅ Back</a>
-        <form method="post" asp-action="ClearClaims"
-              onsubmit="return confirm('Are you sure you want to clear all your claims?');">
-            <button type="submit" class="btn btn-danger btn-sm">🗑 Clear All Claims</button>
-        </form>
-    </div>
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
 
-    <table class="table table-bordered table-striped">
-        <thead>
-            <tr>
-                <th>Hours Worked</th>
-                <th>Hourly Rate</th>
-                <th>Total Amount</th>
-                <th>Notes</th>
-                <th>Document</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var claim in Model)
-            {
-                <tr>
-                    <td>@claim.HoursWorked</td>
-                    <td>@claim.HourlyRate</td>
-                    <td>@claim.TotalAmount</td>
-                    <td>@claim.Notes</td>
-                    <td>
-                        @if (!string.IsNullOrEmpty(claim.FileName))
-                        {
-                            <a href="/uploads/@claim.FileName" target="_blank">@claim.FileName</a>
-                        }
-                        else
-                        {
-                            <span>N/A</span>
-                        }
-                    </td>
-                    <td>
-                        @if (claim.Status == "Pending")
-                        {
-                            <span class="badge bg-warning text-dark">Pending Review</span>
-                        }
-                        else if (claim.Status == "Approved")
-                        {
-                            <span class="badge bg-success">Approved</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-danger">Rejected</span>
-                        }
-                    </td>
-                    <td>
-                        <form method="post" asp-action="DeleteClaim" onsubmit="return confirm('Are you sure you want to delete this claim?');">
-                            <input type="hidden" name="id" value="@claim.Id" />
-                            <button type="submit" class="btn btn-outline-danger btn-sm">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+    @if (!Model.Any())
+    {
+        <div class="glass-card">
+            <p class="text-muted text-center m-0">You haven't submitted any claims yet.</p>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex justify-content-between mb-3">
+            <a href="/Lecturer/Index" class="btn btn-outline-secondary pill-btn">⬅ Back</a>
+
+            <form method="post" asp-action="ClearClaims"
+                  onsubmit="return confirm('Are you sure you want to clear all your claims?');">
+                <button type="submit" class="btn btn-danger btn-sm pill-btn">🗑 Clear All Claims</button>
+            </form>
+        </div>
+
+        <div class="glass-card">
+            <table class="table table-bordered glass-table">
+                <thead>
+                    <tr>
+                        <th>Hours Worked</th>
+                        <th>Hourly Rate</th>
+                        <th>Total Amount</th>
+                        <th>Notes</th>
+                        <th>Document</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var claim in Model)
+                    {
+                        <tr>
+                            <td>@claim.HoursWorked</td>
+                            <td>@claim.HourlyRate</td>
+                            <td>R @claim.TotalAmount</td>
+                            <td>@claim.Notes</td>
+
+                            <td>
+                                @if (!string.IsNullOrEmpty(claim.FileName))
+                                {
+                                    <a href="/uploads/@claim.FileName" target="_blank">@claim.FileName</a>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">N/A</span>
+                                }
+                            </td>
+
+                            <td>
+                                @if (claim.Status == "Pending")
+                                {
+                                    <span class="status-pending">Pending</span>
+                                }
+                                else if (claim.Status == "Approved")
+                                {
+                                    <span class="status-approved">Approved</span>
+                                }
+                                else
+                                {
+                                    <span class="status-rejected">Rejected</span>
+                                }
+                            </td>
+
+                            <td>
+                                <form method="post" asp-action="DeleteClaim"
+                                      onsubmit="return confirm('Delete this claim?');">
+                                    <input type="hidden" name="id" value="@claim.Id" />
+                                    <button type="submit" class="btn btn-outline-danger btn-sm pill-btn">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+        </div>
+    }
+</div>
