@@ -180,68 +180,84 @@
                 </thead>
 
                 <tbody>
-                    @foreach (var claim in Model)
-                    {
-                        <tr>
-                            <td>@claim.LecturerName</td>
-                            <td>@claim.HoursWorked</td>
-                            <td>R @claim.HourlyRate</td>
-                            <td><strong>R @claim.TotalAmount.ToString("N2")</strong></td>
-                            <td>@claim.Notes</td>
+@foreach (var claim in Model)
+{
+    <tr>
 
-                            <td>
-                                @if (!string.IsNullOrEmpty(claim.FileName))
-                                {
-                                    <a href="/uploads/@claim.FileName"
-                                       target="_blank"
-                                       class="text-primary fw-semibold">View</a>
-                                }
-                                else
-                                {
-                                    <span class="text-muted">N/A</span>
-                                }
-                            </td>
+        <!-- Lecturer column -->
+        <td>
+            @claim.LecturerName
 
-                            <td>
-                                @if (claim.Status == "Pending")
-                                {
-                                    <span class="status-badge pending">Pending</span>
-                                }
-                                else if (claim.Status == "Approved")
-                                {
-                                    <span class="status-badge approved">Approved</span>
-                                }
-                                else
-                                {
-                                    <span class="status-badge rejected">Rejected</span>
-                                }
-                            </td>
+            <!-- AUTOMATED WARNINGS -->
+            @if (claim.TotalAmount > 15000)
+            {
+                <span class="badge bg-warning text-dark ms-2">High Amount</span>
+            }
 
-                            <td>
-                                @if (claim.Status == "Pending")
-                                {
-                                    <form method="post" asp-action="Approve" asp-controller="Coordinator" class="d-inline">
-                                        <input type="hidden" name="id" value="@claim.Id" />
-                                        <button type="submit" class="btn btn-success btn-sm pill-btn me-1">Approve</button>
-                                    </form>
+            @if (string.IsNullOrEmpty(claim.FileName))
+            {
+                <span class="badge bg-danger ms-2">No Document</span>
+            }
+        </td>
 
-                                    <form method="post" asp-action="Reject" asp-controller="Coordinator" class="d-inline">
-                                        <input type="hidden" name="id" value="@claim.Id" />
-                                        <button type="submit" class="btn btn-danger btn-sm pill-btn">Reject</button>
-                                    </form>
-                                }
-                                else
-                                {
-                                    <div class="small text-muted">
-                                        @claim.Status <br />
-                                        by @claim.ApprovedBy <br />
-                                        on @claim.ApprovedDate?.ToString("yyyy-MM-dd HH:mm")
-                                    </div>
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
+        <td>@claim.HoursWorked</td>
+        <td>R @claim.HourlyRate</td>
+        <td><strong>R @claim.TotalAmount.ToString("N2")</strong></td>
+        <td>@claim.Notes</td>
+
+        <td>
+            @if (!string.IsNullOrEmpty(claim.FileName))
+            {
+                <a href="/uploads/@claim.FileName"
+                   target="_blank"
+                   class="text-primary fw-semibold">View</a>
+            }
+            else
+            {
+                <span class="text-muted">N/A</span>
+            }
+        </td>
+
+        <td>
+            @if (claim.Status == "Pending")
+            {
+                <span class="status-badge pending">Pending</span>
+            }
+            else if (claim.Status == "Approved")
+            {
+                <span class="status-badge approved">Approved</span>
+            }
+            else
+            {
+                <span class="status-badge rejected">Rejected</span>
+            }
+        </td>
+
+        <td>
+            @if (claim.Status == "Pending")
+            {
+                <form method="post" asp-action="Approve" asp-controller="Coordinator" class="d-inline">
+                    <input type="hidden" name="id" value="@claim.Id" />
+                    <button type="submit" class="btn btn-success btn-sm pill-btn me-1">Approve</button>
+                </form>
+
+                <form method="post" asp-action="Reject" asp-controller="Coordinator" class="d-inline">
+                    <input type="hidden" name="id" value="@claim.Id" />
+                    <button type="submit" class="btn btn-danger btn-sm pill-btn">Reject</button>
+                </form>
+            }
+            else
+            {
+                <div class="small text-muted">
+                    @claim.Status <br />
+                    by @claim.ApprovedBy <br />
+                    on @claim.ApprovedDate?.ToString("yyyy-MM-dd HH:mm")
+                </div>
+            }
+        </td>
+    </tr>
+}
+</tbody>
             </table>
         </div>
     }

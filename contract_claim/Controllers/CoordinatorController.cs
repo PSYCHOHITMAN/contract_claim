@@ -30,10 +30,10 @@ namespace contract_claim.Controllers
 
             if (claim == null) return NotFound();
 
-            // RUN POLICY CHECKS
+            
             var policy = ClaimPolicyService.ValidateClaim(claim, claims);
 
-            // AUTOMATIC REJECTION
+            
             if (policy.AutoReject)
             {
                 claim.Status = "Rejected";
@@ -45,13 +45,12 @@ namespace contract_claim.Controllers
                 return RedirectToAction("ClaimsList");
             }
 
-            // OTHERWISE APPROVE
+            
             claim.Status = "Approved";
             claim.ApprovedBy = HttpContext.Session.GetString("Username");
             claim.ApprovedDate = DateTime.Now;
             ClaimRepository.SaveAll(claims);
 
-            // WARNINGS
             if (policy.Warnings.Any())
             {
                 TempData["Message"] = "⚠️ Claim approved, but with warnings: " +

@@ -43,12 +43,11 @@ namespace contract_claim.Services
                 result.Warnings.Add("Large payout detected (> R15,000). Requires careful review.");
             }
 
-            // RULE 5 — Duplicate claim in same month
             bool duplicate = allClaims.Any(c =>
-                c.Id != claim.Id &&
-                c.LecturerName == claim.LecturerName &&
-                c.SubmittedDate?.ToString("yyyy-MM") == claim.SubmittedDate?.ToString("yyyy-MM")
-            );
+    c.Id != claim.Id &&
+    c.LecturerName == claim.LecturerName &&
+    c.SubmittedDate.ToString("yyyy-MM") == claim.SubmittedDate.ToString("yyyy-MM")
+);
 
             if (duplicate)
             {
